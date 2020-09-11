@@ -604,36 +604,36 @@ imap <C-s> <esc>:w<CR>a
 "fix bug that \<aBR> can't works normaly in gvim  修复退格键在gvim下无法使用的问题  
 
 ### 显示 View
-`syntax on`
-"color mode 显示行数
-`set number`
-"display rows 显示相对行数
-`set relativenumber`
-"display relative rows 在光标行进行下划线高亮
-`set cursorline`
-"show a line in the cursor row 在光标所在行显示一条线以作标识
-`set shiftwidth=<number>`
-"auto shift will use this length 自动换行使用长度
-`set tabstop=<number>`
-"\<tab> will show this blank length \<tab>的空白显示长度
-`set softtabstop=<number>`
-"auto change into tab&space when type \<tab>, depend on tabstop value 输入\<tab>时将插入空格和制表符 取决于tabstop值
-`set wrap`
-"auto line break 自动换行
-`set showcmd`
-"show all possible command when type `<tab>` 命令行模式下按 `<tab>`进行单词猜想
-`set wildmenu`
-"show command line completion when type `<tab>` and `<direction>` 命令行模式下按 `<tab>` 和方向键进行单词补全
-`set hlsearch`
-"highlight the searched string 搜索时高亮全部查找词
-`set incsearch`
-"highlight the cursor selecting string 高亮全屏中的光标当前单词
-`set ruler`
-"show ruler at the right-bottom, default display cursor position 在右下角显示光标坐标
-`set novisualbell`
-"bell when error occurs instead of flash screen 进行错误操作时将发出警告音 而不是闪烁屏幕
+`syntax on`  
+"color mode 显示行数  
+`set number`  
+"display rows 显示相对行数  
+`set relativenumber`  
+"display relative rows 在光标行进行下划线高亮  
+`set cursorline`  
+"show a line in the cursor row 在光标所在行显示一条线以作标识  
+`set shiftwidth=<number>`  
+"auto shift will use this length 自动换行使用长度  
+`set tabstop=<number>`  
+"\<tab> will show this blank length \<tab>的空白显示长度  
+`set softtabstop=<number>`  
+"auto change into tab&space when type \<tab>, depend on tabstop value 输入\<tab>时将插入空格和制表符 取决于tabstop值  
+`set wrap`  
+"auto line break 自动换行  
+`set showcmd`  
+"show all possible command when type `<tab>` 命令行模式下按 `<tab>`进行单词猜想  
+`set wildmenu`  
+"show command line completion when type `<tab>` and `<direction>` 命令行模式下按 `<tab>` 和方向键进行单词补全  
+`set hlsearch`  
+"highlight the searched string 搜索时高亮全部查找词  
+`set incsearch`  
+"highlight the cursor selecting string 高亮全屏中的光标当前单词  
+`set ruler`  
+"show ruler at the right-bottom, default display cursor position 在右下角显示光标坐标  
+`set novisualbell`  
+"bell when error occurs instead of flash screen 进行错误操作时将发出警告音 而不是闪烁屏幕  
 
-### 编辑 Edit
+### 编辑 Edit  
 `set ignorecase`   
 "searching will ignore case 搜索时忽略大小写  
 `set smartcase`   
