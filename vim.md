@@ -60,6 +60,7 @@ RC0 2020/09/09-03/01
     - [NERDTree-文件管理](#NERDTree)
     - [tagbar-代码结构管理](#Tagbar)
     - [tabular-快速对齐](#Tabular)
+	- [NERDCommenter-快速注释](#NERDCommenter)
 - [贡献者](#贡献者)
 - [许可 LICENSE](#许可-LICENSE)
 
@@ -161,10 +162,12 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 #### 编辑相关
 > 注意vim的任何删除操作都会将删除的字符串移入剪切板 因此更准确来说 vim所有的删除操作都是剪切操作(插入模式下`<BR>` `<Delete>`等直接编辑操作除外)  
 
-`c` cut 删除并进入插入模式 `C` 同 但为删除光标至行尾  
+- 默认需要指定范围的指令( `c` `y` `d` )都需要附加操作符来选定作用范围 关于附加操作 见[下](#附加操作 Motion)
+
+`c` cut 删除并进入插入模式 `C` 同 但为删除光标至行尾的字符(相当于 `c$`)  
 `s` 删除光标后一个字符并进入插入模式 `S` 同 但为删除整行  
 `x` 同`<Delete>` `X` 同`<Backspace>` 但都同其他操作符一样会移入剪切板  
-`d` delete 删除  
+`d` delete 删除 `D` 同 但为删除光标到行尾的字符(相当于 `d$`)  
 `y` yank 复制  
 `p` paste 从下行粘贴 `P` 从本行粘贴  
 
@@ -179,7 +182,17 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 `J` 将下一行与本行合并 相当于`jI<BR><Space><esc>`(移动到下一格 在行首插入 退格 空格 回到普通模式)  
 
 #### 移动相关
-`h` `j` `k` `l` 分别同上下左右(←/↓/↑/→)  
+```
+    k
+    ^
+    |
+h<--+-->l
+    |
+	V
+    j
+```
+`h` `j` `k` `l` 分别同左下上右方向键  
+`gj` `gk` 上下移动光标 但并非移动实际行 而是屏幕显示的渲染行 (建议考虑映射至 `j` `k` 关于按键映射 见[这里](#快捷键-keymap))
 `H` `M` `L` 光标跳转至窗口最顶/中/最底行的开头 到顶/底行的行为会受到 `scrolloff` 值的限制 具体见[移动 Move](#移动 Move) 并建议进行实际测试  
 `+` `-` 同上下  
 
@@ -193,6 +206,7 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 `e` end of word 光标跳转至 当前单词的尾部  
 `w` next word 光标跳转至 当前单词的尾部后的空格  
 `b` back word 光标跳转至 当前单词的头部  
+`E` `W` `B` 效果类似以上三项 但"单词"的判断硬性为以空格分隔 而不会将符号作为"单词"与"单词"的分隔了
 `%` 支持大/中/小括号 当光标所在字符为有头尾配对的括号时 输入 `%` 将跳转到另一半的括号  
 > 尝试将光标放这里的任一括号 并输入 `%` 体会效果: `int outPut{print(paperArray[20]);}`  
 
@@ -208,7 +222,7 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 `<n>G` 跳转到第\<n>行  
 
 `(` `)` 上/下一句句首  
-`{` `}` 段首  
+`{` `}` 上/下一段段首(以`\n`(空行)进行判断) 
 
 > 如开头所说的通用格式 这些移动操作大多数也是可以使用 `<n><operation>` 的 例如 `2w` 指光标跳过2个单词到其后面的空格上  
 
@@ -284,7 +298,10 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 
 ### 行指令操作
 
-圈定范围后输入 `:` 命令行区将出现 `:'\<,'> `(输入 `esc` 取消)此时输入命令行模式指令即可在圈定的每一行各执行一次  
+1. 圈定范围
+2. 输入 `:` 命令行区将出现 `:'\<,'> `(输入 `esc` 取消)
+3. 此时输入命令行模式指令即可在圈定的每一行各执行一次  
+
 如 `normal <operation>` 将在圈定的每一行各进行一次普通模式操作\<operation>  
 > 例如在圈定行的每一行行末都加上".jpg"  
 > 假想操作如下:  
@@ -298,8 +315,13 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 
 ### 快速行操作(块可视模式限定)
 
-块可视模式下圈定范围后输入 `A/I` 在行首、尾进入插入(特殊)模式 输入任意字符后esc进入普通模式 同时将对此前圈定范围的每行都进行同样的插入方式  
-相较行指令操作更快捷灵活 但却仅限于添加字符(切换到替换模式后不会进行批处理) 而无法进行其他操作  
+1. 块可视模式下圈定范围  
+2. 输入 `A/I` 在行首/尾进入插入(特殊)模式  
+   `c/C` 删除范围内字符/范围头到行尾并进入插入(特殊)模式  
+3. 输入任意字符后esc进入普通模式 同时将对此前圈定范围的每行都进行同样的插入方式  
+
+- 相较行指令操作更快捷灵活 但却仅限于添加字符(切换到替换模式后不会进行批处理) 而无法进行其他操作  
+
 > 例子同上的行指令操作  
 > 假想操作如下：  
 > 1. `esc` 进入普通模式  
@@ -308,7 +330,7 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 > 4. `A/I` 在行首、尾进入插入(特殊)模式 输入".jpg"  
 > 5. `esc` 进入普通模式 即可完成多行行末添加.jpg字符串  
 
----------------------  
+---------------------
 
 ## 命令行模式
 > 通用格式 `:<command><\option>`   
@@ -447,12 +469,17 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 
 `:tabdo <command>` 对所有标签页都进行\<command>操作  
 
----------------------  
+--------------------- 
 
 ## 自定义vim配置
-> 一般在"~/" 标准配置名为".vimrc" 没有可自行创建 如上part 输入 `:source <file>` 可重载(临时 重启vim即失效 但配置文件即使不是要求的名字与路径也可以)  
-> 如果使用neovim 标准配置名为"init.vim" 那么将在"~/.local/share/nvim/"(linux下); "~/appdata/local/nvim/"(windows下)  
-> 基本上 command mode 的指令 都可以使用 只是省略了":" 反过来同理 相当于一个批处理帮你启动时自动输入  
+
+- vim的配置文件的书写格式为vimscript vim脚本文件 不过并不复杂
+    - 基本上 command mode 的指令 都可以使用 只是省略了":" 反过来同理 相当于一个批处理帮你启动时自动输入  
+    - 一般在"~/" 标准配置名为".vimrc" vim将会在启动时自动加载 没有可自行创建
+    - 如果使用neovim 标准配置名为"init.vim" 那么将在"~/.local/share/nvim/"(linux下); "~/appdata/local/nvim/"(windows下)   
+
+> 输入 `:source <file>` 可重载(临时 重启vim即失效 但配置文件即使不是要求的名字与路径也可以)  
+
 > 部分设置需要重启vim才能失效  
 
 `let <operation>="<key>"` 更改快捷键  
@@ -461,27 +488,27 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 `noremap <key> <originKey>` 同上 但不递归  
 `syntax [on/off]` 高亮  
 `set <\option>` 或 `set <option>=[enum]` 修改设置  
-> 对于有数字的设置项而言 命令行模式下 `:set <option>` 不添加 `=` 将输出当前值
+> 对于有数字的设置项而言 命令行模式下 `:set <option>` 不添加 `=` 将输出当前值  
 
 `exec <command>`  启动vim时执行指令  
 
 `if()...elseif()...else...endif` 判断 与其他编程语言大同小异 不详解  
 `autocmd <action> <filetype> <command>` 当使用\<filetype>文件发生\<action>时  将自动执行\<command>  
-`func <string>(<parameter>...)...endfunc` 函数
+`func <string>(<parameter>...)...endfunc` 函数  
 
 ### 快捷键 keymap
-- 映射
+- 映射  
 
-> 参考[链接](#http://yyq123.blogspot.com/2010/12/vim-map.html)
-> 以下用简称代表模式: `n`普通模式 `v`可视模式 `o`运算符模式(即输入操作符时的状态) `c`命令行模式 `i`插入模式
+> [参考链接](#http://yyq123.blogspot.com/2010/12/vim-map.html)  
+> 以下用简称代表模式: `n`普通模式 `v`可视模式 `o`运算符模式(即输入操作符时的状态) `c`命令行模式 `i`插入模式  
 
-`map <key><originKey>` 重载按键映射 生效于 `nvo`
-`noremap <key><originKey>` 同上但不递归查找按键映射(无法被二次映射)
-在前加模式缩写表示仅在对应模式生效
-> 如果使用如`imap`对插入模式进行映射 注意是否会影响正常编辑文档 应尽可能避免使用单字映射
-> <key> 和 <originKey> 一样 映射目标都可为任意长度 类似密码和宏了
+`map <key><originKey>` 重载按键映射 生效于 `nvo`  
+`noremap <key><originKey>` 同上但不递归查找按键映射(无法被二次映射)  
+在前加模式缩写表示仅在对应模式生效  
+> 如果使用如`imap`对插入模式进行映射 注意是否会影响正常编辑文档 应尽可能避免使用单字映射  
+> <key> 和 <originKey> 一样 映射目标都可为任意长度 类似密码和宏了  
 
-例: 插入模式下一键输入for(c/c++)
+例: 插入模式下一键输入for(c/c++)  
 ```
 imap /f <CR>for (int i = 0; ;i++){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f;a<Right>
 ```
@@ -492,7 +519,19 @@ imap /f <CR>for (int i = 0; ;i++){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><
 > `let mapleader = "<aSpace>"`  
 > `map <space><space> <leader><leader>` "空格键映射为\<leader>时需要双映射 否则可能出现重复输入的bug  
 
-- \<aCtrl>  
+- 特殊键  
+- [参考链接](https://blog.csdn.net/JasonDing1354/article/details/45372007)  
+
+| vim配置中的使用   | 实际表示    |
+| ----------------- | ----------- |
+| \<k0>-\<k9>       | 小键盘      |
+| <S-key>           | Shift+键    |
+| <C-key>           | Ctrl+键     |
+| <A-Key>或\<M-key> | Alt/Meta+键 |
+| <Esc>             | Esc         |
+| <Space>           | 空格键      |
+| <Tab>             | Tab         |
+| <CR>              | Enter       |
 
 使用 `<C-key>` 进行记录  
 > `noremap <C-h> 5h` 重载[Ctrl+h]为`5h`(向上移动5行)  
@@ -646,17 +685,17 @@ imap <C-s> <esc>:w<CR>a
 `set scrolloff=<n>` 上下滚动时光标上下保留行数 建议实际调整以理解  
 `set whichwrap=b,s,h,l,<,>,[,]` 移动到行首/末时将转移至别行  
 
-| 字符 | 对应按键      |  
-| ---- | ------------- |  
-| b    | \<aBR>         |  
-| s    | \<aSPACE>      |  
-| h    | h             |  
-| l    | l             |  
-| \<    | ←             |  
-| >    | →             |  
-| ~    | ~(普通模式下) |  
-| [    | ←(插入模式下) |  
-| ]    | →(插入模式下) |  
+| 字符 | 对应按键      |
+| ---- | ------------- |
+| b    | \<aBR>         |
+| s    | \<aSPACE>      |
+| h    | h             |
+| l    | l             |
+| \<    | ←             |
+| >    | →             |
+| ~    | ~(普通模式下) |
+| [    | ←(插入模式下) |
+| ]    | →(插入模式下) |
 
 `set mouse=<enum>` 支持鼠标定位、选取 但同时也没有了shift+滚轮调整字体大小的功能  
 
@@ -669,7 +708,10 @@ imap <C-s> <esc>:w<CR>a
 
 ### 语言 Language
 
-解决乱码问题(未必能解决)  
+- 如果是终端模式的vim 修改后仍然无法解决 可以检查终端编码方式  
+- 终端模式会沿用终端自身的编码 背景 字体 如果vim主题没有生效 同样先检查终端  
+
+解决乱码问题:  
 ```
 set fileencodings=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set encoding=utf-8
@@ -677,6 +719,12 @@ set encoding=utf-8
 "set fencs=utf8,gbk,gb2312,gb18030
 "set langmenu=zh_CN.UTF-8
 "language message zh_CN.UTF-8
+```
+
+解决中文符号以及unicode emoji显示不全的问题 可能在终端模式下有bug:  
+```
+set ambiwidth=double
+"fix some word only graph half
 ```
 
 ### 函数 Function
@@ -703,12 +751,12 @@ set encoding=utf-8
 ## 插件 Plugin  
 ### 使用方法  
 1. 手动管理  
-> 1. 下载插件 放置于`<pluginInstallDirection>`的单独文件夹中
+> 1. 下载插件 放置于`<pluginInstallDirection>`的单独文件夹中  
 > 2. 重启vim
 2. 自动安装  
-> 1. 安装Vim-plug, 方法:
-> 2. 终端输入 `$ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim`
-> `-fLo`参数后指定下载路径 只要将其放入vim路径即可 一般为上例路径
+> 1. 安装Vim-plug, 方法:  
+> 2. 终端输入 `$ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim`  
+> `-fLo`参数后指定下载路径 只要将其放入vim路径即可 一般为上例路径  
 > 3. 在.vimrc中添加如下:  
 >
 > ```
@@ -732,8 +780,6 @@ set encoding=utf-8
 
 ### 插件推荐
 [推荐链接](https://www.jiqizhixin.com/articles/2020-06-05-4)  
-目前使用 NERDTree airline  
-主题类 snazzy gruvbox  
 
 `.vimrc` Plugin部分参考:  
 ```  
@@ -746,6 +792,10 @@ Plug 'ycm-core/YouCompleteMe'
 "代码补全 需要python 在终端中进入插件目录输入 `python install.py --all` 即可编译所有可用语言的代码补全
 Plug 'preservim/nerdtree'
 "可视化文件管理菜单 支持书签
+Plug 'Xuyuanp/nerdtree-git-plugin'
+"使NERDTree通过图标提示文件的变动
+Plug 'jistr/vim-nerdtree-tabs'
+"使不同标签页下的NERDTree同步
 Plug 'majutsushi/tagbar'
 "可视化文件代码结构 支持快速跳转 需要python
 Plug 'godlygeek/tabular'
@@ -819,8 +869,10 @@ set guifont=SimHei:h17
 
 #### 使用
 
+类似普通分屏 而`..`指父目录  
+
 `?` 帮助  
-主要内容见下:
+主要内容见下:  
 ```
 " NERDTree (6.9.9) quickhelp~
 " ============================
@@ -841,10 +893,23 @@ set guifont=SimHei:h17
 "
 ```
 
-`o` 或 `鼠标左键双击` 打开文件夹 或 在前一个分屏打开文件(如果只有一个分屏 那么就新建分屏)  
+- [参考链接](https://www.cnblogs.com/littlewrong/p/6535728.html)  
+
+`K` `J` 到同目录的第一个/最后一个项目    
+`p` `P` 光标跳转到上一级目录/当前根目录  
+`r` `R` 刷新光标所在文件夹/当前根目录  
+`u` `U` 设计上级目录为根目录 `U` 另并维持原有的文件夹展开状态  
+
+`o` 或 `鼠标左键双击` 开关文件夹 或 在前一个分屏打开文件(如果只有一个分屏 那么就新建分屏)  
+`x` `X` 分别收起当前打开的文件夹和所有文件夹  
 `i` 上下分屏打开文件 `s` 左右屏打开新文件  
 `g<openCommand>` 以上操作前加 `g` 将不会自动进行跳转  
 `t` 在新页面打开文件 `T` 在新页面打开文件 但不跳转(`gt`? 虽然其实并没有指令 `gt`)  
+
+`A` 切换全屏显示NERDTree  
+`q` 关闭NERDTree  
+`m` 打开文件系统管理菜单(可进行新建 移动 删除文件等操作)  
+`I` 开关显示隐藏文件/文件夹(`.`开头的文件/文件夹)(临时)  
 
 #### 配置
 `let NERDTreeShowHidden=1` 显示隐藏文件  
@@ -860,9 +925,20 @@ map <F10> :NERDTreeToggle<CR>
 map <F11> :NERDTreeFind<CR>
 
 let NERDTreeShowHidden=1
-"will show hidden file
+"will show hidden file 显示隐藏文件
 let NERDTreeQuitOnOpen=1
-"NERDTree will auto quit after open file
+"NERDTree will auto quit after open file 开启文件后NERDTree自动关闭
+let NERDTreeShowLineNumbers=1
+let NERDTreeAutoCenter=1
+"显示行号
+let NERDTreeWinSize=30
+"设置宽度
+let g:nerdtree_tabs_open_on_console_startup=1
+"在终端启动vim时，共享NERDTree
+let NERDTreeIgnore=['\.pyc','\~$','\.swp']
+"忽略一下文件的显示
+let NERDTreeShowBookmarks=1
+"显示书签列表
 ```
 
 ### Tagbar
@@ -873,9 +949,9 @@ let NERDTreeQuitOnOpen=1
 `:TagbarToggle` 开关Tagbar  
 
 推荐配置:  
-```  
+```
 map <F8> :TagbarToggle<CR>  
-```  
+```
 
 #### 使用
 `?`查看帮助  
@@ -952,9 +1028,9 @@ eitherThanOsu = 820
 解析: 以连续含等号的所有行作为范围 以等号作为中心 左边置中对齐 其后添加1个空格 然后等号也向左对齐 然后添加1个空格 最后等号右边的字符串向左对齐 后面不添加空格  
 
 ### NERDCommenter
-- [github仓库](https://github.com/preservim/nerdcommenter)
+- [github仓库](https://github.com/preservim/nerdcommenter)  
 
-虽然原版vim已经有许多方法可以快速代码块注释 
+虽然原版vim已经有许多方法可以快速代码块注释  
 但这个插件提供了更为方便 自动识别语言 开箱即用的快速代码块注释方法  
 
 #### 使用
@@ -965,9 +1041,9 @@ eitherThanOsu = 820
 `<leader>ci` 或 `<leader>c[space]` 开关注释(有注译下会拆成无注译 无注译下会添加注译) 无法对非行首起的注译进行操作  
 > 取消注译和开关注译的拆解机制类似内存栈 多层注译会一层层拆开  
 
-`<leader>c$` 从光标处注译到行尾
+`<leader>c$` 从光标处注译到行尾  
 
-`<leader>ca` 切换另一种注译符 如果当前文本语言有的话(`<leader>cm`仍然只使用块注译)
+`<leader>ca` 切换另一种注译符 如果当前文本语言有的话(`<leader>cm`仍然只使用块注译)  
 
 ----------------------
 
