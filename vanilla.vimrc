@@ -147,7 +147,7 @@ imap <C-s> <esc>:w<CR>a
 "some single mode notepad keymap 对常见单模式文本编辑器快捷键的补充
 
 "theme
-colorscheme desert
+colorscheme default
 
 if(has('gui_running'))
 	set guifont=SimHei:h17

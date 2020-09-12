@@ -88,6 +88,7 @@ RC0 2020/09/09-03/01
 | function  | 函数名               |
 | CR        | 回车                 |
 | BR        | 退格                 |
+| Leader    | vim特殊键 默认是`\\` |
 | nop       | 空(vim中\<nop>即空)  |
 | enum      | 枚举值 一般另有说明  |
 
@@ -179,7 +180,7 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 
 #### 移动相关
 `h` `j` `k` `l` 分别同上下左右(←/↓/↑/→)  
-`H` `L` 光标跳转至窗口最上/下一行的开头 这行为会受到 `scrolloff` 值的限制 具体见[移动 Move](#移动 Move) 并建议进行实际测试  
+`H` `M` `L` 光标跳转至窗口最顶/中/最底行的开头 到顶/底行的行为会受到 `scrolloff` 值的限制 具体见[移动 Move](#移动 Move) 并建议进行实际测试  
 `+` `-` 同上下  
 
 `f` find char 光标跳转至 下一个\<char>  
@@ -753,12 +754,29 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 "提供开启浏览器实时预览markdown的方法
 "Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "go语言支持
+Plug 'frazrepo/vim-rainbow'
+"用不同颜色进行括号分级 使代码更易读
+Plug 'preservim/nerdcommenter'
+"快速注释代码
+Plug 'airblade/vim-gitgutter'
+"在行数左边显示git仓库的变动
 
+"主题 亮暗模式可通过 `set background=[light/dart]` 实现
 Plug 'connorholyday/vim-snazzy'
+"冷色调 偏蓝 紫
 Plug 'morhetz/gruvbox'
-Plug 'altercation/vim-colors-solarized'
+"主灰棕 高亮绿红橙
 Plug 'Marfisc/vorange'
+"类似gruvbox 但高亮色略有不同
+Plug 'altercation/vim-colors-solarized'
+"亮暗双模式 暗色模式蓝背景 主蓝色 不支持真彩色
+Plug 'lifepillar/vim-solarized8'
+"上主题的fork 支持真彩色
 Plug 'soft-aesthetic/soft-era-vim'
+"低对比 白 紫
+Plug 'rakr/vim-one'
+"亮暗双模式 偏原始风
+
 call plug#end()
 ```  
 
@@ -932,6 +950,24 @@ eitherThanOsu     =  820
 eitherThanOsu = 820
 ```
 解析: 以连续含等号的所有行作为范围 以等号作为中心 左边置中对齐 其后添加1个空格 然后等号也向左对齐 然后添加1个空格 最后等号右边的字符串向左对齐 后面不添加空格  
+
+### NERDCommenter
+- [github仓库](https://github.com/preservim/nerdcommenter)
+
+虽然原版vim已经有许多方法可以快速代码块注释 
+但这个插件提供了更为方便 自动识别语言 开箱即用的快速代码块注释方法  
+
+#### 使用
+类似操作符 支持前加 `[n]` 快速选定行数  
+`<leader>cc` 进行行注释 默认使用行注译(如c中的`//...`)  
+`<leader>cm` 同上 但只使用块注译(如c中的`/*...*/`)  
+`<leader>cu` 取消注释  
+`<leader>ci` 或 `<leader>c[space]` 开关注释(有注译下会拆成无注译 无注译下会添加注译) 无法对非行首起的注译进行操作  
+> 取消注译和开关注译的拆解机制类似内存栈 多层注译会一层层拆开  
+
+`<leader>c$` 从光标处注译到行尾
+
+`<leader>ca` 切换另一种注译符 如果当前文本语言有的话(`<leader>cm`仍然只使用块注译)
 
 ----------------------
 

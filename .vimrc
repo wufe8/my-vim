@@ -58,7 +58,7 @@ set mouse=nv
 set fileencodings=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set encoding=utf-8
 "set termencoding=utf-8
-"set fencs=utf8,gbk,gb2312,gb18030
+set fencs=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 "set langmenu=zh_CN.UTF-8
 "language message zh_CN.UTF-8
 
@@ -115,16 +115,19 @@ else
 	noremap <C-_> :noh<CR>
 endif
 "[ctrl+'-'(minus)] to hidden search result highlight 关闭搜索高亮显示
-noremap <F5> :call CompileRunProg()<CR>
-func CompileRunRrog()
-	exec "w"
-	if &filetype == 'markdown'
-		exec "MarkdownPreview"
-	else
-		exec "echo "Unknown language!""
-	endif
-endfunc
+"noremap <F5> :call CompileRunProg()<CR>
+"func CompileRunRrog()
+"	exec "w"
+"	if &filetype == 'markdown'
+"		exec "MarkdownPreview"
+"	else
+"		exec "echo "Unknown language!""
+"	endif
+"endfunc
 "[F5] to auto complie 一键保存并编译
+"nmap <F4> <Plug>MarkdownPreview
+"nmap <F5> <Plug>MarkdownPreviewStop
+"nmap <F6> <Plug>MarkdownPreviewToggle
 
 "Keymap-Insert mode 插入模式下的快速操作
 inoremap /h1 # 
@@ -163,23 +166,73 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 "提供开启浏览器实时预览markdown的方法
 "Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "go语言支持
+Plug 'frazrepo/vim-rainbow'
+"用不同颜色进行括号分级 使代码更易读
+Plug 'preservim/nerdcommenter'
+"快速注释代码
+Plug 'airblade/vim-gitgutter'
+"在行数左边显示git仓库的变动
 
+"主题 亮暗模式可通过 `set background=[light/dart]` 实现
 Plug 'connorholyday/vim-snazzy'
+"冷色调 偏蓝 紫
 Plug 'morhetz/gruvbox'
-Plug 'altercation/vim-colors-solarized'
+"主灰棕 高亮绿红橙
 Plug 'Marfisc/vorange'
+"类似gruvbox 但高亮色略有不同
+Plug 'altercation/vim-colors-solarized'
+"亮暗双模式 暗色模式蓝背景 主蓝色 不支持真彩色
+Plug 'lifepillar/vim-solarized8'
+"上主题的fork 支持真彩色
 Plug 'soft-aesthetic/soft-era-vim'
+"低对比 白 紫
+Plug 'rakr/vim-one'
+"亮暗双模式 偏原始风
+
 call plug#end()
 
-
 "theme
+"Credit joshdick
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+  if (has("nvim"))
+	"For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
+set background=dark " for the dark version 
+"set background=light " for the light version
+if (has("gui_running") || has("nvim"))
+	set termguicolors
+endif
+
 "colorscheme desert
+
 colorscheme snazzy
+let g:SnazzyTransparent=1
+
 "colorscheme gruvbox
+"let g:airline_theme="gruvbox"
+
 "colorscheme solarized
+"colorscheme solarized8
+"let g:solarized_termtrans=1
+
+"colorscheme vorange
+"let g:airline_theme="vorange"
+
 "colorscheme soft-era
 
-let g:solarized_termtrans=1
+"colorscheme one
+"let g:airline_theme="one"
 
 if(has('gui_running'))
 	set guifont=SimHei:h17
@@ -190,8 +243,6 @@ elseif(has('nvim'))
 	set guifont=黑体:h17
 	"1080p mode, will return WARNING but aable to use
 endif
-
-let g:SnazzyTransparent=1
 
 "Tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -231,3 +282,6 @@ let g:mkdp_port = ''
 " preview page title
 " ${name} will be replace with the file name
 let g:mkdp_page_title = '「${name}」'
+
+"vim-rainbow
+let g:rainbow_active = 1
