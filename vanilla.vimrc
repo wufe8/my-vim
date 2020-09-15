@@ -1,6 +1,6 @@
 "this is a .vimrc for vanilla  
 "by wufe8  
-"
+
 "BugFix  
 set nocompatible
 "set term=screen-256color  
@@ -69,8 +69,10 @@ set ambiwidth=double
 "let mapleader="<space>"  
 "map <space><space> <leader><leader>  
  
-noremap s :w<CR>
-"[s] to save file 保存  
+map s <nop>
+map ss :w<CR>
+"[ss] to save file 保存  
+"锁定屏幕 <C-q>解除
 noremap ; :
 "make enter command easiler([;]) 更方便进入命令行模式  
 noremap <C-,> ;
@@ -118,12 +120,14 @@ noremap <C-right> :vertical resize +5<CR>
 "[ctrl+arrow key] to zoom split size 调整分屏窗口尺寸  
 map ST :tabedit 
 "[ST] to new tab 新建标签页  
+noremap <C--> :noh<CR>
 if(has('nvim'))
 	noremap <C--> :noh<CR>
 else
 	noremap <C-_> :noh<CR>
 endif
 "[ctrl+'-'(minus)] to hidden search result highlight 关闭搜索高亮显示  
+"[ctrl+'/'] in linux
 "noremap <F5> :call CompileRunProg()<CR>  
 "func CompileRunRrog()
 "	exec "w"
@@ -171,3 +175,37 @@ inoremap <C-k> <Up><Up><Up><Up><Up>
 inoremap <C-l> <Right><Right><Right><Right><Right>
 "[ctal+direction] can be use in insert mode  
 "插入模式下可通过[ctrl+方向键]实现更快速的移动  
+"<M-hjkl> may not be run in linux
+
+"theme
+"Credit joshdick
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+  if (has("nvim"))
+	"For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
+set background=dark " for the dark version 
+"set background=light " for the light version
+if (has("gui_running") || has("nvim"))
+	set termguicolors
+endif
+
+if(has('gui_running'))
+	set guifont=SimHei:h17
+	"1080p mode
+	"set guifont=SimHei:h10
+	"22line mode
+elseif(has('nvim'))
+	set guifont=黑体:h17
+	"1080p mode, will return WARNING but aable to use
+endif
