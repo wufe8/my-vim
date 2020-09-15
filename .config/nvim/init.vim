@@ -69,8 +69,10 @@ set ambiwidth=double
 "let mapleader="<space>"  
 "map <space><space> <leader><leader>  
  
-noremap s :w<CR>
-"[s] to save file 保存  
+map s <nop>
+map ss :w<CR>
+"[ss] to save file 保存  
+"锁定屏幕 <C-q>解除
 noremap ; :
 "make enter command easiler([;]) 更方便进入命令行模式  
 noremap <C-,> ;
@@ -278,7 +280,7 @@ elseif(has('nvim'))
 endif
 
 "Tagbar
-nmap <F8> :TagbarToggle<CR>
+nmap <F7> :TagbarToggle<CR>
 
 "NERDTree
 autocmd vimenter * NERDTree
@@ -304,18 +306,20 @@ let NERDTreeShowBookmarks=1
 
 "NERDTree-git-plugin
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜',
-                \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
-                \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
-                \ 'Unknown'   :'?',
+                \ 'Modified'  :'✹ ',
+                \ 'Staged'    :'✚ ',
+                \ 'Untracked' :'✭ ',
+                \ 'Renamed'   :'➜ ',
+                \ 'Unmerged'  :'═ ',
+                \ 'Deleted'   :'✖ ',
+                \ 'Dirty'     :'✗ ',
+                \ 'Ignored'   :'☒ ',
+                \ 'Clean'     :'✔︎ ',
+                \ 'Unknown'   :'? ',
                 \ }
 let g:NERDTreeGitStatusUseNerdFonts = 1 
+let g:NERDTreeGitStatusConcealBrackets = 0 " default: 0
+"Hide the boring brackets([ ])
 
 "markdown-preview
 
@@ -343,3 +347,24 @@ let g:mkdp_page_title = '「${name}」'
 
 "vim-rainbow
 let g:rainbow_active = 1
+
+"ale
+"始终开启标志列
+let g:ale_sign_column_always = 1
+let g:ale_set_highlights = 0
+"自定义error和warning图标
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡'
+"在vim自带的状态栏中整合ale
+let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+"显示Linter名称,出错或警告等相关信息
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+nmap sp <Plug>(ale_previous_wrap)
+nmap sn <Plug>(ale_next_wrap)
+"<Leader>s触发/关闭语法检查
+nmap <Leader>s :ALEToggle<CR>
+"<Leader>d查看错误或警告的详细信息
+nmap <Leader>d :ALEDetail<CR>

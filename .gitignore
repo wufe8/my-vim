@@ -1,0 +1,8 @@
+.git
+.vim/plugged/
+
+!.config
+!.vim/autoload/
+!*.vimrc
+!init.vim
+!plug.vim
