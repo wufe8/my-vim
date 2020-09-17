@@ -120,8 +120,7 @@ noremap <C-right> :vertical resize +5<CR>
 "[ctrl+arrow key] to zoom split size 调整分屏窗口尺寸  
 map ST :tabedit 
 "[ST] to new tab 新建标签页  
-noremap <C--> :noh<CR>
-if(has('nvim'))
+if(has('nvim') && has('win32'))
 	noremap <C--> :noh<CR>
 else
 	noremap <C-_> :noh<CR>
@@ -138,9 +137,6 @@ endif
 "	endif
 "endfunc
 "[F5] to auto complie 一键保存并编译  
-"nmap <F4> <Plug>MarkdownPreview  
-"nmap <F5> <Plug>MarkdownPreviewStop  
-"nmap <F6> <Plug>MarkdownPreviewToggle  
  
 "Keymap-Insert mode 插入模式下的快速操作  
 inoremap /h1 # 
@@ -176,36 +172,9 @@ inoremap <C-l> <Right><Right><Right><Right><Right>
 "[ctal+direction] can be use in insert mode  
 "插入模式下可通过[ctrl+方向键]实现更快速的移动  
 "<M-hjkl> may not be run in linux
+"inoremap ( ()<Left>
+"inoremap < <><Left>
+"inoremap [ []<Left>
+"inoremap { {}<Left>
+"括号补全
 
-"theme
-"Credit joshdick
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-if (empty($TMUX))
-  if (has("nvim"))
-	"For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
-  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-  if (has("termguicolors"))
-    set termguicolors
-  endif
-endif
-set background=dark " for the dark version 
-"set background=light " for the light version
-if (has("gui_running") || has("nvim"))
-	set termguicolors
-endif
-
-if(has('gui_running'))
-	set guifont=SimHei:h17
-	"1080p mode
-	"set guifont=SimHei:h10
-	"22line mode
-elseif(has('nvim'))
-	set guifont=黑体:h17
-	"1080p mode, will return WARNING but aable to use
-endif

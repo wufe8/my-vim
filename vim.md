@@ -388,6 +388,11 @@ h<--+-->l
 
 `eariler <time>` 当前文档回溯至\<atime>前的状态 \<time> \<s> \</s>  
 
+- 特殊快捷键
+[ctrl+s] 锁定终端  
+[ctrl+q] 解除终端锁定  
+如果不小心按到 一般不会是vim卡死或者崩溃(笑)  
+
 ### 书签 Marks  
 \<mark> 指代书签名  
 
@@ -496,10 +501,10 @@ h<--+-->l
 `autocmd <action> <filetype> <command>` 当使用\<filetype>文件发生\<action>时  将自动执行\<command>  
 `func <string>(<parameter>...)...endfunc` 函数  
 
-### 快捷键 keymap
+### 快捷键 Keymap
 - 映射  
 
-> [参考链接](#http://yyq123.blogspot.com/2010/12/vim-map.html)  
+> [参考链接](#http://yyq124.blogspot.com/2010/12/vim-map.html)  
 > 以下用简称代表模式: `n`普通模式 `v`可视模式 `o`运算符模式(即输入操作符时的状态) `c`命令行模式 `i`插入模式  
 
 `map <key><originKey>` 重载按键映射 生效于 `nvo`  
@@ -522,16 +527,17 @@ imap /f <CR>for (int i = 0; ;i++){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><
 - 特殊键  
 - [参考链接](https://blog.csdn.net/JasonDing1354/article/details/45372007)  
 
-| vim配置中的使用   | 实际表示    |
-| ----------------- | ----------- |
-| \<k0>-\<k9>       | 小键盘      |
-| <S-key>           | Shift+键    |
-| <C-key>           | Ctrl+键     |
-| <A-Key>或\<M-key> | Alt/Meta+键 |
-| <Esc>             | Esc         |
-| <Space>           | 空格键      |
-| <Tab>             | Tab         |
-| <CR>              | Enter       |
+| vim配置中的使用    | 实际表示                    |
+| ------------------ | --------------------------- |
+| \<k0>-\<k9>        | 小键盘                      |
+| \<S-key>           | Shift+键                    |
+| \<C-key>           | Ctrl+键                     |
+| \<A-Key>或\<M-key> | Alt/Meta+键                 |
+| \<Esc>             | Esc                         |
+| \<Space>           | 空格键                      |
+| \<Tab>             | Tab                         |
+| \<CR>              | Enter                       |
+| \<C-\_>            | windows下为"-"; unix下为"/" |
 
 使用 `<C-key>` 进行记录  
 > `noremap <C-h> 5h` 重载[Ctrl+h]为`5h`(向上移动5行)  
@@ -565,6 +571,7 @@ else
 	map RE <C-w>v:e $MYVIMRC<CR>
 endif
 "[RC] hot reload vimrc; [RE] fast open to edit vimrc; will use different vimrc(init.vim) if neovim; need to define $MYVIMRC, $MYNEOVIMRC
+"windows下并不会自动定义$MYVIMRC 而$MYNEOVIMRC完全是手动设定以方便分开更改的 因此并不能作为参考
 "开启与重载vim配置文件 需要定义变量
 noremap <C-h> 5h
 noremap <C-j> 5j
@@ -742,6 +749,10 @@ set ambiwidth=double
 | nvim        | nvim运行     |
 | python      | python2加载  |
 | python3     | python3加载  |
+| win32       | windows系统  |
+| unix        | unix系的系统 |
+| mac         | macos        |
+
 
 `line('<enum>')` 返回\<number>  
 根据输入返回行数 `.`当前行  
@@ -810,6 +821,8 @@ Plug 'preservim/nerdcommenter'
 "快速注释代码
 Plug 'airblade/vim-gitgutter'
 "在行数左边显示git仓库的变动
+Plug 'dense-analysis/ale'
+"代码错误检查
 
 "主题 亮暗模式可通过 `set background=[light/dart]` 实现
 Plug 'connorholyday/vim-snazzy'
@@ -857,6 +870,46 @@ set guifont=SimHei:h10
 set guifont=SimHei:h17
 "1080p mode
 ```
+
+### YouCompleteME
+
+一个强大却又难以安装的代码补全+检测的插件  
+c++编写 效率高 需要python环境 以及cmake编译  
+
+#### 安装
+YouCompleteME 以下简称YCM  
+1. 同其他插件 clone到对应目录 或者使用插件管理进行安装  
+2. 终端进入YCM目录 输入`python ./install.py` linux环境可使用`./install.sh`
+3. 编译完成后 重启vim 可能启动时要求`set encoding=utf-8`  
+
+### ale
+
+一个强大的代码检测插件 异步 提供详细信息窗口显示  
+需要检测工具 本身并不提供(但基本上进行过简单的编程环境构建的电脑肯定有一两个可用的检测工具  
+安装简单 可开箱即用  
+
+#### 配置
+"ale
+"参考: https://juejin.im/entry/6844903713421656071
+"始终开启标志列
+let g:ale_sign_column_always = 1
+let g:ale_set_highlights = 0
+"自定义error和warning图标
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡'
+"在vim自带的状态栏中整合ale
+let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+"显示Linter名称,出错或警告等相关信息
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+nmap sp <Plug>(ale_previous_wrap)
+nmap sn <Plug>(ale_next_wrap)
+"<Leader>s触发/关闭语法检查
+nmap <Leader>s :ALEToggle<CR>
+"<Leader>d查看错误或警告的详细信息
+nmap <Leader>d :ALEDetail<CR>
 
 ### NERDTree
 

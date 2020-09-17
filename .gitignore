@@ -1,5 +1,6 @@
 .git
 .vim/plugged/
+.vim/.netrwhist
 
 !.config
 !.vim/autoload/

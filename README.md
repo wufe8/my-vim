@@ -8,8 +8,11 @@ wufe8的个人vim配置 笔记等资料
 ```
 myvim
 |
-+--- .vimrc //配置
-+--- README.md //本文件
-+--- vanilla.vim //无插件配置
-+--- vim.md //笔记
++-- .config //用户配置
+|    +-- nvim
+|        +-- init.vim //nvim配置
++-- .vimrc //vim配置
++-- README.md //本文件
++-- vanilla.vimrc //无插件配置
++-- vim.md //笔记
 ```

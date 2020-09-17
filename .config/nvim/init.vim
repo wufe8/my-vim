@@ -85,7 +85,7 @@ map R <nop>
 "[R*] File&Profile 文件与配置相关  
 map RH <C-w>s:e $VIMDOC<CR><C-w>15+
 "[RH] open help file need to define $VIMDOC 开启自定义说明文档 需要定义变量  
-if(has('nvim'))
+if(has('nvim') && has('win32'))
 	map RC :source $MYNEOVIMRC<CR>
 	map RE <C-w>v:e $MYNEOVIMRC<CR>
 else
@@ -120,8 +120,7 @@ noremap <C-right> :vertical resize +5<CR>
 "[ctrl+arrow key] to zoom split size 调整分屏窗口尺寸  
 map ST :tabedit 
 "[ST] to new tab 新建标签页  
-noremap <C--> :noh<CR>
-if(has('nvim'))
+if(has('nvim') && has('win32'))
 	noremap <C--> :noh<CR>
 else
 	noremap <C-_> :noh<CR>
@@ -138,9 +137,6 @@ endif
 "	endif
 "endfunc
 "[F5] to auto complie 一键保存并编译  
-"nmap <F4> <Plug>MarkdownPreview  
-"nmap <F5> <Plug>MarkdownPreviewStop  
-"nmap <F6> <Plug>MarkdownPreviewToggle  
  
 "Keymap-Insert mode 插入模式下的快速操作  
 inoremap /h1 # 
@@ -176,6 +172,11 @@ inoremap <C-l> <Right><Right><Right><Right><Right>
 "[ctal+direction] can be use in insert mode  
 "插入模式下可通过[ctrl+方向键]实现更快速的移动  
 "<M-hjkl> may not be run in linux
+"inoremap ( ()<Left>
+"inoremap < <><Left>
+"inoremap [ []<Left>
+"inoremap { {}<Left>
+"括号补全
 
 "Plugin
 call plug#begin('~/.vim/plugged')
@@ -322,7 +323,7 @@ let g:NERDTreeGitStatusConcealBrackets = 0 " default: 0
 "Hide the boring brackets([ ])
 
 "markdown-preview
-
+map <F3> <Plug>MarkdownPreview  
 " set to 1, preview server available to others in your network
 " by default, the server listens on localhost (127.0.0.1)
 " default: 0
@@ -336,7 +337,7 @@ let g:mkdp_open_ip = ''
 
 " specify browser to open preview page
 " default: ''
-let g:mkdp_browser = 'chrome'
+let g:mkdp_browser = ''
 
 " use a custom port to start server or random for empty
 let g:mkdp_port = ''
@@ -349,6 +350,7 @@ let g:mkdp_page_title = '「${name}」'
 let g:rainbow_active = 1
 
 "ale
+"参考: https://juejin.im/entry/6844903713421656071
 "始终开启标志列
 let g:ale_sign_column_always = 1
 let g:ale_set_highlights = 0
