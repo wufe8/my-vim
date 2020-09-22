@@ -1,6 +1,21 @@
 "This .vimrc(or inti.vim) is for dairy use  
 "by wufe8  
 
+"Autocmd
+autocmd vimenter * normal SS
+autocmd vimenter * term
+autocmd vimenter * resize 7
+autocmd vimenter * tabedit $VIMDOC
+autocmd vimenter * normal RE
+autocmd vimenter * vertical resize 65
+autocmd vimenter * tabfirst
+"自启动文件有出现无代码高亮的bug 有需要请手动关闭并重新打开文件
+
+"Autocmd-require some plugin
+autocmd vimenter * TagbarToggle
+autocmd vimenter * vertical resize 110
+autocmd vimenter * NERDTree
+
 "BugFix  
 set nocompatible
 "set term=screen-256color  
@@ -55,10 +70,10 @@ set whichwrap=b,s,h,l,<,>,[,]
 set mouse=nv
  
 "Language  
-set fileencodings=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set fileencodings=utf-8,ucs-bom,shift-jis,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set encoding=utf-8
 "set termencoding=utf-8  
-set fencs=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set fencs=utf-8,ucs-bom,shift-jis,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 "set langmenu=zh_CN.UTF-8  
 "language message zh_CN.UTF-8  
  
@@ -75,7 +90,7 @@ map ss :w<CR>
 "锁定屏幕 <C-q>解除
 noremap ; :
 "make enter command easiler([;]) 更方便进入命令行模式  
-noremap <C-,> ;
+noremap <M-,> ;
 "[fFtT] can search faster: [,] go backword and [ctrl+,] go forword  
 "更方便行内查找 并且避开因进入命令行模式按键修改的不兼容  
 noremap r R
@@ -83,7 +98,7 @@ noremap r R
 "因为[R]用于文件处理了 更改[r]为原[R]进入替换模式 比单字符替换更适用   
 map R <nop>
 "[R*] File&Profile 文件与配置相关  
-map RH <C-w>s:e $VIMDOC<CR><C-w>15+
+map RH <C-w>v:e $VIMDOC<CR><C-w>15+
 "[RH] open help file need to define $VIMDOC 开启自定义说明文档 需要定义变量  
 if(has('nvim') && has('win32'))
 	map RC :source $MYNEOVIMRC<CR>
@@ -113,10 +128,10 @@ map SW :set nosplitbelow<CR>:split<CR>
 map SD :set splitright<CR>:vsplit<CR>
 "[S][WASD] to open new split in hjkl side 四向分屏  
 "相比自带的[ctrl+w][sv]或`:split :vsplit`更快捷  
-noremap <C-up> :res +5<CR>
-noremap <C-down> :res -5<CR>
-noremap <C-left> :vertical resize -5<CR>
-noremap <C-right> :vertical resize +5<CR>
+noremap <C-up> :res +3<CR>
+noremap <C-down> :res -3<CR>
+noremap <C-left> :vertical resize -3<CR>
+noremap <C-right> :vertical resize +3<CR>
 "[ctrl+arrow key] to zoom split size 调整分屏窗口尺寸  
 map ST :tabedit 
 "[ST] to new tab 新建标签页  
@@ -139,19 +154,22 @@ endif
 "[F5] to auto complie 一键保存并编译  
  
 "Keymap-Insert mode 插入模式下的快速操作  
-inoremap /h1 # 
-inoremap /h2 ## 
-inoremap /h3 ### 
-inoremap /h4 #### 
-inoremap /h5 ##### 
-inoremap /h6 ###### 
-inoremap /c ``<Left>
-inoremap /b ``````<Left><Left><Left><CR><CR><Up>
-inoremap /l <CR>----------------------<CR>
+inoremap \h1 # 
+inoremap \h2 ## 
+inoremap \h3 ### 
+inoremap \h4 #### 
+inoremap \h5 ##### 
+inoremap \h6 ###### 
+inoremap \v ``<Left>
+inoremap \b ``````<Left><Left><Left><CR><CR><Up>
+inoremap \l <CR>----------------------<CR>
 "markdown  
-imap /i <CR>if (){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f(a
-imap /w <CR>while (){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f(a
-imap /f <CR>for (int i = 0; ;i++){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f;a<Right>
+imap \i if (){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f(a
+imap \s switch (I)<CR>{<CR><BS>case 0:<CR><CR>break;<CR>case 1:<CR><CR>break;<CR>case 2:<CR><CR>break;<CR>default:<CR><CR>}<esc>14kfIa
+imap \w while (I)<CR>{<CR><CR>}<esc>3kf(a
+imap \f for (int i = 0; i < 10 ;i++)<CR>{<CR><CR>}<esc>3kf;la
+imap \c class N<CR>{<CR><BS>private:<CR>int A;<CR><BS>public:<CR>int B(int C);<CR>N(int I);<CR>~N();<CR><BS>};<esc>8k0fNa
+imap \mp #include <iostream><CR><CR>int main(int argc, char* argv[])<CR>{<CR><CR>return 0;<CR><BS>}<C-o>2k<Tab>
 "c, c++, java  
 inoremap <C-z> <C-o>u
 inoremap <C-u> <C-o><C-r>
@@ -171,12 +189,14 @@ inoremap <C-k> <Up><Up><Up><Up><Up>
 inoremap <C-l> <Right><Right><Right><Right><Right>
 "[ctal+direction] can be use in insert mode  
 "插入模式下可通过[ctrl+方向键]实现更快速的移动  
-"<M-hjkl> may not be run in linux
+"<M-hjkl> may not be run in linux+vim, but can be map in neovim
 "inoremap ( ()<Left>
 "inoremap < <><Left>
 "inoremap [ []<Left>
 "inoremap { {}<Left>
 "括号补全
+tnoremap <Esc><Esc> <C-\><C-n>
+"quit exit terminal mode 快速退出终端模式
 
 "Plugin
 call plug#begin('~/.vim/plugged')
@@ -284,7 +304,6 @@ endif
 nmap <F7> :TagbarToggle<CR>
 
 "NERDTree
-autocmd vimenter * NERDTree
 "open NERDTree split when vim opeded
 map <F8> :NERDTree
 map <F9> :NERDTreeToggle<CR>
@@ -296,10 +315,10 @@ let NERDTreeQuitOnOpen=1
 let NERDTreeShowLineNumbers=1
 let NERDTreeAutoCenter=1
 "显示行号
-let NERDTreeWinSize=30
+let NERDTreeWinSize=25
 "设置宽度
-let g:nerdtree_tabs_open_on_console_startup=1
-"在终端启动vim时，共享NERDTree
+"let g:nerdtree_tabs_open_on_console_startup=1
+"启动vim及切换标签页时自动启动NERDTree
 let NERDTreeIgnore=['\.pyc','\~$','\.swp']
 "忽略一下文件的显示
 let NERDTreeShowBookmarks=1
