@@ -1071,7 +1071,8 @@ eitherThanOsu = 820
 ```
 
 #### <ext>参数介绍
-`<ext>` 可选 具体为 `/[r/c/l][number][r/c/l][number][r/c/l][number]` 分3对 分别对应中心 `<char>` 的左/自身/右 而每组 `[r/c/l]` 分别为向左/中/右对齐 [mumber]指其后添加的空格数 0即不添加  
+`<ext>` 可选 具体为 `/[r/c/l][number][r/c/l][number][r/c/l][number]` 分3对  
+分别对应中心 `<char>` 的左/自身/右 而每组 `[r/c/l]` 分别为向左/中/右对齐 [number]指其后添加的空格数 0即不添加  
 > 因为 `char` 一般等长 所以调整 `<char>` 的对齐方向一般并无作用  
 > 如以下可能产生完全一样的效果 `:Tab /#/l1l1r0` `:Tab /#/l1c1r0` `:Tab /#/l1r1r0`  
 
