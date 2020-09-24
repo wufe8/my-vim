@@ -347,7 +347,10 @@ h<--+-->l
 `:normal <operation>` 同普通模式的操作符 一般配合可视模式下的行指令操作使用  
 `:set <option>` 临时设置vim配置 重启即失效 如希望重启仍生效 请见 [](#)  
 
+`:version` `:ver` 检查该vim的编译信息与功能支持情况
 `:CheckHealth` Neovim独有 检查插件语言支持情况 可根据指示进行安装配置  
+
+一般来说 将vim支持的外部工具/软件添加至PATH环境变量即可 neovim可能有额外操作 具体需自行查找教程  
 
 #### 查找并替换
 
@@ -798,6 +801,7 @@ set ambiwidth=double
 >
 > 4. 重载`.vimrc`后输入`:PlugInstall`即可自动下载安装  
 
+部分插件需要其他软件支持  
 ### Vim-Plug常用指令
 `:PlugInstall` 根据`.vimrc`的plug描述进行安装  
 `:PlugUpdate` 根据`.vimrc`的plug描述检测插件更新  
@@ -900,12 +904,13 @@ YouCompleteME 以下简称YCM
 ### ale
 
 一个强大的代码检测插件 异步 提供详细信息窗口显示  
-需要检测工具 本身并不提供(但基本上进行过简单的编程环境构建的电脑肯定有一两个可用的检测工具  
+需要检测工具(支持lsp的) 本身并不提供(但基本上进行过简单的编程环境构建的电脑肯定有一两个可用的检测工具  
 安装简单 可开箱即用  
 
 #### 配置
-"ale
-"参考: https://juejin.im/entry/6844903713421656071
+- 参考[链接](https://juejin.im/entry/6844903713421656071)  
+
+```
 "始终开启标志列
 let g:ale_sign_column_always = 1
 let g:ale_set_highlights = 0
@@ -925,6 +930,7 @@ nmap sn <Plug>(ale_next_wrap)
 nmap <Leader>s :ALEToggle<CR>
 "<Leader>d查看错误或警告的详细信息
 nmap <Leader>d :ALEDetail<CR>
+```
 
 ### NERDTree
 
@@ -1011,6 +1017,7 @@ let NERDTreeShowBookmarks=1
 
 ### Tagbar
 可查看代码块结构 支持跳转, 查找, 预览等功能  
+需要ctag 并将ctag/bin添加至PATH环境变量  
 
 #### 命令行添加
 
