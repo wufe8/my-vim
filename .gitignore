@@ -1,9 +1,11 @@
 .git
 .vim/plugged/
 .vim/.netrwhist
+issue*
 
 !.config
 !.vim/autoload/
-!*.vimrc
-!init.vim
+!.vimrc
+!.config/nvim/init.vim
+!.config/nvim/autoload/
 !plug.vim

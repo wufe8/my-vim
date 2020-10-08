@@ -2,7 +2,9 @@
 "by wufe8  
 
 "Autocmd
-autocmd vimenter * normal SS
+if has("nvim")
+	autocmd vimenter * normal SS
+endif
 autocmd vimenter * term
 autocmd vimenter * resize 7
 autocmd vimenter * tabedit $VIMDOC
@@ -55,6 +57,10 @@ set ruler
 "show ruler at the right-bottom, default display cursor position 在右下角显示光标坐标  
 set novisualbell
 "bell when error occurs instead of flash screen 进行错误操作时将发出警告音 而不是闪烁屏幕  
+set splitbelow
+"`split` will open on the below of origin window(default is `nosplitbelow`) 创建默认垂直分屏窗口将创建在相对原窗口的下方 而非上方  
+set splitright
+"`vsplit` will open in the right of origin window(default is `nosplitright`)) 创建默认垂直分屏窗口将创建在相对原窗口的右方 而非左方  
  
 "Edit 编辑  
 set ignorecase
@@ -133,6 +139,7 @@ noremap <C-down> :res -3<CR>
 noremap <C-left> :vertical resize -3<CR>
 noremap <C-right> :vertical resize +3<CR>
 "[ctrl+arrow key] to zoom split size 调整分屏窗口尺寸  
+"windows下 ctrl+上下可能无效
 map ST :tabedit 
 "[ST] to new tab 新建标签页  
 if(has('nvim') && has('win32'))
@@ -324,19 +331,19 @@ let NERDTreeIgnore=['\.pyc','\~$','\.swp']
 let NERDTreeShowBookmarks=1
 "显示书签列表
 
-"NERDTree-git-plugin
+NERDTree-git-plugin
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹ ',
-                \ 'Staged'    :'✚ ',
-                \ 'Untracked' :'✭ ',
-                \ 'Renamed'   :'➜ ',
-                \ 'Unmerged'  :'═ ',
-                \ 'Deleted'   :'✖ ',
-                \ 'Dirty'     :'✗ ',
-                \ 'Ignored'   :'☒ ',
-                \ 'Clean'     :'✔︎ ',
-                \ 'Unknown'   :'? ',
-                \ }
+				\ 'Modified'  :'✹ ',
+				\ 'Staged'    :'✚ ',
+				\ 'Untracked' :'✭ ',
+				\ 'Renamed'   :'➜ ',
+				\ 'Unmerged'  :'═ ',
+				\ 'Deleted'   :'✖ ',
+				\ 'Dirty'     :'✗ ',
+				\ 'Ignored'   :'☒ ',
+				\ 'Clean'     :'✔︎ ',
+				\ 'Unknown'   :'? ',
+				\ }
 let g:NERDTreeGitStatusUseNerdFonts = 1 
 let g:NERDTreeGitStatusConcealBrackets = 0 " default: 0
 "Hide the boring brackets([ ])

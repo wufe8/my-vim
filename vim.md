@@ -696,6 +696,10 @@ imap <C-s> <esc>:w<CR>a
 "show ruler at the right-bottom, default display cursor position 在右下角显示光标坐标  
 `set novisualbell`  
 "bell when error occurs instead of flash screen 进行错误操作时将发出警告音 而不是闪烁屏幕  
+set splitbelow
+"`split` will open on the below of origin window(default is `nosplitbelow`) 创建默认垂直分屏窗口将创建在相对原窗口的下方 而非上方  
+set splitright
+"`vsplit` will open in the right of origin window(default is `nosplitright`)) 创建默认垂直分屏窗口将创建在相对原窗口的右方 而非左方  
 
 ### 编辑 Edit  
 `set ignorecase`   
