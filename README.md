@@ -12,6 +12,7 @@ myvim
 |    +-- nvim
 |        +-- init.vim //nvim配置
 +-- .vimrc //vim配置
++-- install.bat //windows下一键配置vim&neovim 需要git
 +-- README.md //本文件
 +-- vanilla.vimrc //无插件配置
 +-- vim.md //笔记

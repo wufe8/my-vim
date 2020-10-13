@@ -2,10 +2,16 @@
 .vim/plugged/
 .vim/.netrwhist
 issue*
+.plugged
+test.bat
+*.swp
+*.un~
+*.BACKUP
+testPageWin
+testPageUnix
 
-!.config
-!.vim/autoload/
 !.vimrc
 !.config/nvim/init.vim
-!.config/nvim/autoload/
-!plug.vim
+
+!.vim/autoload/plug.vim
+!.config/nvim/autoload/plug.vim
