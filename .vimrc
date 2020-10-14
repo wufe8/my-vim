@@ -96,7 +96,7 @@ map ss :w<CR>
 "锁定屏幕 <C-q>解除
 noremap ; :
 "make enter command easiler([;]) 更方便进入命令行模式  
-noremap <M-,> ;
+noremap <C-,> ;
 "[fFtT] can search faster: [,] go backword and [ctrl+,] go forword  
 "更方便行内查找 并且避开因进入命令行模式按键修改的不兼容  
 noremap r R
@@ -225,7 +225,6 @@ inoremap <C-l> <Right><Right><Right><Right><Right>
 "inoremap ) <ESC>:call RemoveNextDoubleChar(')')<CR>a
 "inoremap ] <ESC>:call RemoveNextDoubleChar(']')<CR>a
 "inoremap } <ESC>:call RemoveNextDoubleChar('}')<CR>a
-"
 "" 输入一个字符时，如果下一个字符也是括号，则删除它，避免出现重复字符
 "
 ""括号补全
@@ -299,12 +298,12 @@ function! RemovePairs()
 	end
 endfunction
 " 用退格键删除一个左括号时同时删除对应的右括号
-inoremap <C-BS> <ESC>:call RemovePairs()<CR>a
+inoremap ,, <ESC>:call RemovePairs()<CR>a
 "inoremap <BS> <ESC>:call RemoveEmptyPairs()<CR>a
 "括号删除 https://juejin.im/entry/6844903473050304526
-inoremap <S-CR> <CR><ESC>ddkPI
-inoremap <S-BS> <ESC>ddpXi
-"向上回车
+inoremap \= <CR><ESC>ddkPI
+inoremap \- <ESC>ddpXi
+"向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
 "Plugin
 call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
@@ -404,8 +403,10 @@ if(has('gui_running'))
 	"set guifont=SimHei:h10
 	"22line mode
 elseif(has('nvim'))
-	set guifont=黑体:h17
+	"set guifont=黑体:h17
+	set guifont=SimHei:h17
 	"1080p mode, will return WARNING but aable to use
+	"some language in windows need 黑体 instand of SimHei
 endif
 
 "Tagbar

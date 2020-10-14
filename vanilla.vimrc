@@ -91,7 +91,7 @@ map ss :w<CR>
 "锁定屏幕 <C-q>解除
 noremap ; :
 "make enter command easiler([;]) 更方便进入命令行模式  
-noremap <M-,> ;
+noremap <C-,> ;
 "[fFtT] can search faster: [,] go backword and [ctrl+,] go forword  
 "更方便行内查找 并且避开因进入命令行模式按键修改的不兼容  
 noremap r R
@@ -196,7 +196,7 @@ inoremap <C-l> <Right><Right><Right><Right><Right>
 "插入模式下可通过[ctrl+方向键]实现更快速的移动  
 "<M-hjkl> may not be run in linux+vim, but can be map in neovim
 
-括号的自动补全 效率与智能较低
+"括号的自动补全 效率与智能较低
 function! InsertPairs(charOpen, charClose)
 	let l:line = getline(".")
 	let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
@@ -207,7 +207,6 @@ endfunction
 inoremap ( <ESC>:call InsertPairs('(', ')')<CR>i
 inoremap [ <ESC>:call InsertPairs('[', ']')<CR>i
 inoremap { <ESC>:call InsertPairs('{', '}')<CR>i
-
 " 括号补全 特别地 如果下一个字符是右括号 不会进行补全 避免出现重复字符
 
 function! RemoveNextDoubleChar(char)
@@ -297,12 +296,12 @@ function! RemovePairs()
 endfunction
 
 " 用退格键删除一个左括号时同时删除对应的右括号
-inoremap <C-H> <ESC>:call RemovePairs()<CR>a
-"inoremap <C-h> <ESC>:call RemoveEmptyPairs()<CR>a
-"括号删除 https://juejin.im/entry/6844903473050304526 
-inoremap <S-CR> <CR><ESC>ddkPI
-inoremap <S-BS> <ESC>ddpXi
-"向上回车
+inoremap ,, <ESC>:call RemovePairs()<CR>a
+"inoremap <BS> <ESC>:call RemoveEmptyPairs()<CR>a
+"括号删除 https://juejin.im/entry/6844903473050304526
+inoremap \= <CR><ESC>ddkPI
+inoremap \- <ESC>ddpXi
+"向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
 
 "theme
 "Credit joshdick
@@ -335,6 +334,8 @@ if(has('gui_running'))
 	"set guifont=SimHei:h10
 	"22line mode
 elseif(has('nvim'))
-	set guifont=黑体:h17
-	"1080p mode, will return WARNING but aable to use
+	"set guifont=黑体:h17
+	set guifont=SimHei:h17
+	"1080p mode, will return WARNING but able to use
+	"some language in windows need 黑体 instand of SimHei
 endif
