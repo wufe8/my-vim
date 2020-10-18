@@ -3,10 +3,10 @@
 .vim/.netrwhist
 issue*
 .plugged
-test.bat
 *.swp
 *.un~
 *.BACKUP
+test
 testPageWin
 testPageUnix
 
