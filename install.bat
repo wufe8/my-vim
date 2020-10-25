@@ -14,9 +14,13 @@ REM vanilla 原版无插件
 
 echo [GET] install %1 %2
 
-REM 变换参数 bat没有提供逻辑or
+set vimrcPath=%USERPROFILE%
+set neovimrcPath=%USERPROFILE%\AppData\Local\nvim
+
+REM 变换参数 bat没有提供逻辑or以及and
 set willChangeVim=n
 set willChangeNeoVim=n
+set vaildParamater=y
 if "%1" == "all" (
 	set willChangeVim=y
 	set willChangeNeoVim=y
@@ -25,91 +29,117 @@ if "%1" == "all" (
 )else if "%1" == "neovim" (
 	set willChangeNeoVim=y
 )else (
-	call:PrintHelp
+	set vaildParamater=n
 )
 
-if "%2" == "vanilla" Goto VaildParaMeterTwo
-if "%2" == "plugin" Goto VaildParaMeterTwo
-Goto PrintHelp
-:VaildParaMeterTwo
+if "%vaildParamater%" == "y" (
+	if "%2" == "vanilla" (
+		set vaildParamater=y
+	) else if "%2" == "plugin" (
+		set vaildParamater=y
+	) else (
+		set vaildParamater=n
+	)
+)
 
+echo [INFO] vaildParamater %vaildParamater%
 
-set needRecoverVim=y
-set needRecoverNeoVim=y
+if "%vaildParamater%" == "y" (
+	set needRecoverVim=y
+	set needRecoverNeoVim=y
 
-call:Init
-
-echo=
-echo [INFO] willChangeVim %willChangeVim%
-echo [INFO] willChangeNeoVim %willChangeNeoVim%
-echo [INFO] needRecoverVim %needRecoverVim%
-echo [INFO] needRecoverNeoVim %needRecoverNeoVim%
-echo=
-
-REM 有插件配置模式 
-if "%2" == "plugin" (
-	REM 判断是否需要变动vim文件 $1应为all或vim
+	REM 有vim配置文件时询问是否覆盖(会进行备份)
 	if "%willChangeVim%" == "y" (
-		REM Vim安装Plugins
-		if NOT exist %USERPROFILE%\.vim (
-			mkdir %USERPROFILE%\.vim
+		if exist %vimrcPath%\.vimrc (
+			set /p needRecoverVim="Vim: find'.vimrc' already exist, want to replace?(origin ,vim will be backup)(y/n)"
+			REM 已经有备份 将进行警告
+			if exist %vimrcPath%\.vimrc.BACKUP (
+				set /p willChangeVim="find %vimrcPath%\.vimrc.BACKUP, are you sure to continue?(y/n)"
+			)
 		)
-		if NOT exist %USERPROFILE%\.vim\autoload (
-			mkdir %USERPROFILE%\.vim\autoload
+	)
+	REM 有neovim配置文件时询问是否覆盖(会进行备份)
+	if "%willChangeNeoVim%" == "y" (
+		REM 如果没有nvim文件夹则创建一个
+		if exist %neovimrcPath%\init.vim (
+			set /p needRecoverNeoVim="NeoVim: find'init.vim' already exist, want to replace?(origin ,vim will be backup)(y/n)"
+			REM 已经有备份 将进行警告
+			if exist %neovimrcPath%\init.vim.BACKUP (
+				set /p willChangeNeoVim="find %neovimrcPath%\init.vim.BACKUP, are you sure to continue?(y/n)"
+			)
 		)
-		if NOT exist %USERPROFILE%\.vim\autoload\plug.vim (
-			copy .vim\autoload\plug.vim %USERPROFILE%\.vim\autoload\plug.vim 
-		) 
-		REM 备份vim配置文件 
-		if "%needRecoverVim%" == "y" (
-			copy %USERPROFILE%\.vimrc %USERPROFILE%\.vimrc.BACKUP
-			echo "backup at %USERPROFILE%\.vimrc.BACKUP"
-			del %USERPROFILE%\.vimrc
-			REM 复制vim配置文件
-			copy .\.vimrc %USERPROFILE%\.vimrc
+	)
+
+	echo=
+	echo [INFO] willChangeVim %willChangeVim%
+	echo [INFO] willChangeNeoVim %willChangeNeoVim%
+	echo [INFO] needRecoverVim %needRecoverVim%
+	echo [INFO] needRecoverNeoVim %needRecoverNeoVim%
+	echo=
+
+	REM 有插件配置模式 
+	if "%2" == "plugin" (
+		REM 判断是否需要变动vim文件 $1应为all或vim
+		if "%willChangeVim%" == "y" (
+			REM Vim安装Plugins
+			if NOT exist %vimrcPath%\.vim (
+				mkdir %vimrcPath%\.vim
+			)
+			if NOT exist %vimrcPath%\.vim\autoload (
+				mkdir %vimrcPath%\.vim\autoload
+			)
+			if NOT exist %vimrcPath%\.vim\autoload\plug.vim (
+				copy .\.vim\autoload\plug.vim %vimrcPath%\.vim\autoload\plug.vim 
+			) 
+			REM 备份vim配置文件 
+			if "%needRecoverVim%" == "y" (
+				copy %vimrcPath%\.vimrc %vimrcPath%\.vimrc.BACKUP
+				echo "backup at %vimrcPath%\.vimrc.BACKUP"
+				del %vimrcPath%\.vimrc
+				REM 复制vim配置文件
+				copy .\.vimrc %vimrcPath%\.vimrc
+			)else (
+				echo skipped vim profile
+			)
 		)else (
 			echo skipped vim profile
 		)
-	)else (
-		echo skipped vim profile
-	)
-	REM 判断是否需要变动neovim文件 $1应为all或neovim
-	if "%willChangeNeoVim%" == "y" (
-		REM NeoVim安装Plugins
-		if NOT exist %USERPROFILE%\AppData\Local\nvim\autoload (
-			mkdir %USERPROFILE%\AppData\Local\nvim\autoload
-		)
-		if NOT exist %USERPROFILE%\AppData\Local\nvim\autoload\plug.vim (
-			copy .config\nvim\autoload\plug.vim %USERPROFILE%\AppData\Local\nvim\autoload\plug.vim
-		)
-		REM 备份neovim配置文件
-		if "%needRecoverNeoVim%" == "y" (
-			copy %USERPROFILE%\AppData\Local\nvim\init.vim %USERPROFILE%\AppData\Local\nvim\init.vim.BACKUP
-			echo "backup at %USERPROFILE%\AppData\Local\nvim\init.vim.BACKUP"
-			del %USERPROFILE%\AppData\Local\nvim\init.vim
-			REM 复制neovim配置文件
-			copy .\.config\nvim\init.vim %USERPROFILE%\AppData\Local\nvim\init.vim
+		REM 判断是否需要变动neovim文件 $1应为all或neovim
+		if "%willChangeNeoVim%" == "y" (
+			REM NeoVim安装Plugins
+			if NOT exist %neovimrcPath%\autoload (
+				mkdir %neovimrcPath%\autoload
+			)
+			if NOT exist %neovimrcPath%\autoload\plug.vim (
+				copy .\.vimrc %neovimrcPath%\autoload\plug.vim
+			)
+			REM 备份neovim配置文件
+			if "%needRecoverNeoVim%" == "y" (
+				copy %neovimrcPath%\init.vim %neovimrcPath%\init.vim.BACKUP
+				echo "backup at %neovimrcPath%\init.vim.BACKUP"
+				del %neovimrcPath%\init.vim
+				REM 复制neovim配置文件
+				copy .\.vimrc %neovimrcPath%\init.vim
+			)else (
+				echo skipped neovim profile
+			)
 		)else (
 			echo skipped neovim profile
 		)
-	)else (
-		echo skipped neovim profile
+	REM 无插件配置文件 
+	)else if "%2" == "vanilla" (
+		if "%needRecoverVim%" == "y" (
+			copy .\vanilla.vimrc %vimrcPath%\.vimrc
+		)
+		if "%needRecoverNeoVim%" == "y" (
+			copy .\vanilla.vimrc %neovimrcPath%\init.vim
+		)
 	)
-REM 无插件配置文件 
-)else if "%2" == "vanilla" (
-	if "%needRecoverVim%" == "y" (
-		copy .\vanilla.vimrc %USERPROFILE%\.vimrc
-	)
-	if "%needRecoverNeoVim%" == "y" (
-		copy .\vanilla.vimrc %USERPROFILE%\AppData\Local\nvim\init.vim
-	)
-)
-echo press any key to continue
-pause>nul
-cmd /k
-exit
-
-:PrintHelp
+	echo press any key to continue
+	pause>nul
+	cmd /k
+	exit
+) else (
 echo -----------------------------
 echo [ERROR] Missing or incorrect parameters 缺少参数或参数错误
 echo 格式: install $1 $2
@@ -127,27 +157,4 @@ echo press any key to continue
 pause>nul
 cmd /k
 exit
-
-:Init
-REM 有vim配置文件时询问是否覆盖(会进行备份)
-if "%willChangeVim%" == "y" (
-	if exist %USERPROFILE%\.vimrc (
-		set /p needRecoverVim="Vim: find'.vimrc' already exist, want to replace?(origin ,vim will be backup)(y/n)"
-		REM 已经有备份 将进行警告
-		if exist %USERPROFILE%\.vimrc.BACKUP (
-			set /p willChangeVim="find %USERPROFILE%\.vimrc.BACKUP, are you sure to continue?(y/n)"
-		)
-	)
 )
-REM 有neovim配置文件时询问是否覆盖(会进行备份)
-if "%willChangeNeoVim%" == "y" (
-	REM 如果没有nvim文件夹则创建一个
-	if exist %USERPROFILE%\AppData\Local\nvim\init.vim (
-		set /p needRecoverNeoVim="NeoVim: find'init.vim' already exist, want to replace?(origin ,vim will be backup)(y/n)"
-		REM 已经有备份 将进行警告
-		if exist %USERPROFILE%\AppData\Local\nvim\init.vim.BACKUP (
-			set /p willChangeNeoVim="find %USERPROFILE%\AppData\Local\nvim\init.vim.BACKUP, are you sure to continue?(y/n)"
-		)
-	)
-)
-Goto:eof
