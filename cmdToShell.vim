@@ -9,7 +9,7 @@ normal ggO#!/bin/bash
 "%s/\\\([A-Za-z0-9()\{\}<>"'\*\?.]\+\)/\/\1/g
 %s/\\/\//g
 ""路径
-%s/set \/p\(.*\)=\(.*\)/echo \2\rread \1
+%s/set \/p\(.*\)=\(.*\)/echo \2\rread \1/g
 "读取
 %s/set //g
 "变量赋值

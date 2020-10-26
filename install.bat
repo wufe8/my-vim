@@ -14,8 +14,8 @@ REM vanilla 原版无插件
 
 echo [GET] install %1 %2
 
-set vimrcPath=~
-set neovimrcPath=~\AppData\Local\nvim
+set vimrcPath=%USERPROFILE%
+set neovimrcPath=%USERPROFILE%\AppData\Local\nvim
 
 REM 变换参数 bat没有提供逻辑or以及and
 set willChangeVim=n
@@ -42,44 +42,41 @@ if "%vaildParamater%" == "y" (
 	)
 )
 
-echo [INFO] vaildParamater %vaildParamater%
+echo [DEBUG] vaildParamater %vaildParamater%
 
 if "%vaildParamater%" == "y" (
-	set needRecoverVim=y
-	set needRecoverNeoVim=y
-
+	set willBackupVim=y
+	set willBackupNeoVim=y
 	REM 有vim配置文件时询问是否覆盖(会进行备份)
 	if "%willChangeVim%" == "y" (
 		if exist %vimrcPath%\.vimrc (
-			set /p needRecoverVim="Vim: find'.vimrc' already exist, want to replace?(origin ,vim will be backup)(y/n)"
+			set /p willChangeVim="Vim: find'.vimrc' already exist, want to replace?(origin ,vim will be backup)(y/n)"
 			REM 已经有备份 将进行警告
 			if exist %vimrcPath%\.vimrc.BACKUP (
-				set /p willChangeVim="find %vimrcPath%\.vimrc.BACKUP, are you sure to continue?(y/n)"
+			set /p willBackupVim="find %vimrcPath%\.vimrc.BACKUP, are you sure to replace BACKUP?(y/n)"
 			)
 		)
 	)
 	REM 有neovim配置文件时询问是否覆盖(会进行备份)
 	if "%willChangeNeoVim%" == "y" (
 		REM 如果没有nvim文件夹则创建一个
-		if NOT exist %neovimrcPath%\init.vim (
+		if NOT exist %neovimrcPath% (
 			mkdir %neovimrcPath%
 		)
 		if exist %neovimrcPath%\init.vim (
-			set /p needRecoverNeoVim="NeoVim: find'init.vim' already exist, want to replace?(origin ,vim will be backup)(y/n)"
+			set /p willChangeNeoVim="NeoVim: find'init.vim' already exist, want to replace?(origin ,vim will be backup)(y/n)"
 			REM 已经有备份 将进行警告
 			if exist %neovimrcPath%\init.vim.BACKUP (
-				set /p willChangeNeoVim="find %neovimrcPath%\init.vim.BACKUP, are you sure to continue?(y/n)"
+			set /p willBackupNeoVim="find %neovimrcPath%\init.vim.BACKUP, are you sure to replace BACKUP?(y/n)"
 			)
 		)
 	)
-
 	echo=
-	echo [INFO] willChangeVim %willChangeVim%
-	echo [INFO] willChangeNeoVim %willChangeNeoVim%
-	echo [INFO] needRecoverVim %needRecoverVim%
-	echo [INFO] needRecoverNeoVim %needRecoverNeoVim%
+	echo [DEBUG] willChangeVim %willChangeVim%
+	echo [DEBUG] willChangeNeoVim %willChangeNeoVim%
+	echo [DEBUG] willBackupVim %willBackupVim%
+	echo [DEBUG] willBackupNeoVim %willBackupNeoVim%
 	echo=
-
 	REM 有插件配置模式 
 	if "%2" == "plugin" (
 		REM 判断是否需要变动vim文件 $1应为all或vim
@@ -95,15 +92,16 @@ if "%vaildParamater%" == "y" (
 				copy .\.vim\autoload\plug.vim %vimrcPath%\.vim\autoload\plug.vim 
 			) 
 			REM 备份vim配置文件 
-			if "%needRecoverVim%" == "y" (
+			if "%willBackupVim%" == "y" (
 				copy %vimrcPath%\.vimrc %vimrcPath%\.vimrc.BACKUP
 				echo "backup at %vimrcPath%\.vimrc.BACKUP"
 				del %vimrcPath%\.vimrc
 				REM 复制vim配置文件
 				copy .\.vimrc %vimrcPath%\.vimrc
 			)else (
-				echo skipped vim profile
+				copy .\.vimrc %vimrcPath%\.vimrc
 			)
+		set PlugInstall=y
 		)else (
 			echo skipped vim profile
 		)
@@ -117,25 +115,79 @@ if "%vaildParamater%" == "y" (
 				copy .\.vimrc %neovimrcPath%\autoload\plug.vim
 			)
 			REM 备份neovim配置文件
-			if "%needRecoverNeoVim%" == "y" (
+			if "%willBackupNeoVim%" == "y" (
 				copy %neovimrcPath%\init.vim %neovimrcPath%\init.vim.BACKUP
 				echo "backup at %neovimrcPath%\init.vim.BACKUP"
 				del %neovimrcPath%\init.vim
 				REM 复制neovim配置文件
 				copy .\.vimrc %neovimrcPath%\init.vim
 			)else (
-				echo skipped neovim profile
+				copy .\.vimrc %neovimrcPath%\init.vim
 			)
+			set PlugInstall=y
 		)else (
-			echo skipped neovim profile
+			echo [INFO] skipped neovim profile
 		)
-	REM 无插件配置文件 
-	)else if "%2" == "vanilla" (
-		if "%needRecoverVim%" == "y" (
-			copy .\vanilla.vimrc %vimrcPath%\.vimrc
-		)
-		if "%needRecoverNeoVim%" == "y" (
-			copy .\vanilla.vimrc %neovimrcPath%\init.vim
+		REM 安装 编译插件以及依赖整理
+		if "%PlugInstall%" == "y" (
+			if "%willChangeNeoVim%" == "y" (
+				REM 为python以及nodejs安装neovim支持 部分插件需要
+				set /p nvimSupport="would you like to install neovim support about python3 and nodejs? required python pip & nodejs npm.(y/n)"
+				echo [DEBUG] nvimSupport %nvimSupport%
+				if "%nvimSupport%" == "y" (
+					pip install pynvim
+					npm install neovim
+				) else (
+					echo [INFO] some plugin will need them, make sure you will install them later if you need these plugin.
+				)
+			)
+			REM 安装插件
+			set /p openVim="would you like to clone and install plugin now?, you need to enter :qa! after install(y/n)"
+			echo [DEBUG] openVim %openVim%
+			if "%openVim%" == "y" (
+				vim -c PlugInstall
+			)else (
+				echo [INFO] you can run vim and press :PlugInstall to install vim plugin later.
+			)
+			REM 编译需编译的插件 需要python
+			set /p compilePlugin="would you like to compile YCM and markdown-preview now? It need python, nodejs, gcc(or visual studio), cmake(y/n)"
+			echo [DEBUG] compilePlugin %compilePlugin%
+			if "%compilePlugin%" == "y" (
+				python %vimrcPath%\.vim\plugged\YouCompleteme\install.py --all
+				echo=
+				npm install $vimrcPath\.vim\plugged\markdown-preview.nvim
+			)else (
+				echo [INFO] you can compile them by yourself later
+			)
+			echo [INFO] besides, tagbar depend ctags, make sure you add ctags into PATH if you need tagbar plugin
+		REM 无插件配置文件 
+		)else if "%2" == "vanilla" (
+			if "%willChangeVim%" == "y" (
+				if "%willBackupVim%" == "y" (
+					copy %vimrcPath%\.vimrc %vimrcPath%\.vimrc.BACKUP
+					echo "backup at %vimrcPath%\.vimrc.BACKUP"
+					del %vimrcPath%\.vimrc
+					REM 复制vim配置文件
+					copy .\vanilla.vimrc %vimrcPath%\.vimrc
+				)else (
+					copy .\vanilla.vimrc %vimrcPath%\.vimrc
+				)
+			)else (
+				echo [INFO] skipped vim profile
+			)
+			if "%willChangeNeoVim%" == "y" (
+				if "%willBackupNeoVim%" == "y" (
+					copy %neovimrcPath%\init.vim %neovimrcPath%\init.vim.BACKUP
+					echo "backup at %neovimrcPath%\init.vim.BACKUP"
+					del %neovimrcPath%\init.vim
+					REM 复制neovim配置文件
+					copy .\vanilla.vimrc %neovimrcPath%\init.vim
+				)else (
+					copy .\vanilla.vimrc %neovimrcPath%\init.vim
+				)
+			)else (
+				echo [INFO] skipped neovim profile
+			)
 		)
 	)
 	echo press any key to continue
@@ -145,14 +197,14 @@ if "%vaildParamater%" == "y" (
 ) else (
 echo -----------------------------
 echo [ERROR] Missing or incorrect parameters 缺少参数或参数错误
-echo 格式: install %1 %2
+echo 格式: install %%1 %%2
 echo -------------------
-echo %1
+echo %%1
 echo all 添加vim与neovim配置文件
 echo vim 仅添加vim
 echo neovim 仅添加neovim
 echo -------------------
-echo %2
+echo %%2
 echo plugin 插件
 echo vanilla 原版无插件
 echo -----------------------------
