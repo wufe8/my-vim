@@ -3,15 +3,28 @@
 
 "Autocmd
 if has("nvim")
-	autocmd vimenter * normal SS
+	autocmd vimenter * set splitbelow
+	autocmd vimenter * split
 endif
 autocmd vimenter * term
 autocmd vimenter * resize 7
-autocmd vimenter * tabedit $VIMDOC
-autocmd vimenter * normal RE
-autocmd vimenter * vertical resize 65
-autocmd vimenter * tabfirst
+"开启内置终端
+"if(has('nvim') && has('win32'))
+	"autocmd vimenter * tabedit $MYNEOVIMRC
+"else
+	"autocmd vimenter * tabedit $MYVIMRC
+"endif
+"autocmd vimenter * vsplit $VIMDOC
+"新建窗口打开vimrc及vim文档
+"autocmd vimenter * vertical resize 65
+"autocmd vimenter * tabfirst
 "自启动文件有出现无代码高亮的bug 有需要请手动关闭并重新打开文件
+
+"Autocmd-require some plugin
+"autocmd vimenter * TagbarToggle
+"autocmd vimenter * vertical resize 110
+"autocmd vimenter * NERDTree
+"开启tagbar以及NERDTree
 
 "BugFix  
 set nocompatible
@@ -91,6 +104,9 @@ map ss :w<CR>
 "锁定屏幕 <C-q>解除
 noremap ; :
 "make enter command easiler([;]) 更方便进入命令行模式  
+map + <C-a>
+map - <C-x>
+"添加数字自增减
 noremap <C-,> ;
 "[fFtT] can search faster: [,] go backword and [ctrl+,] go forword  
 "更方便行内查找 并且避开因进入命令行模式按键修改的不兼容  
@@ -103,10 +119,10 @@ map RH <C-w>v:e $VIMDOC<CR><C-w>15+
 "[RH] open help file need to define $VIMDOC 开启自定义说明文档 需要定义变量  
 if(has('nvim') && has('win32'))
 	map RC :source $MYNEOVIMRC<CR>
-	map RE <C-w>v:e $MYNEOVIMRC<CR>
+	map RE :tabedit $MYNEOVIMRC<CR>
 else
 	map RC :source $MYVIMRC<CR>
-	map RE <C-w>v:e $MYVIMRC<CR>
+	map RE :tabedit $MYVIMRC<CR>
 endif
 "[RC] hot reload vimrc; [RE] fast open to edit vimrc  
 "will use different vimrc(init.vim) if neovim  
@@ -169,19 +185,22 @@ inoremap \v ``<Left>
 inoremap \b ``````<Left><Left><Left><CR><CR><Up>
 inoremap \l <CR>----------------------<CR>
 "markdown  
-imap \i if (){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f(a
-imap \s switch (I)<CR>{<CR><BS>case 0:<CR><CR>break;<CR>case 1:<CR><CR>break;<CR>case 2:<CR><CR>break;<CR>default:<CR><CR>}<esc>14kfIa
-imap \w while (I)<CR>{<CR><CR>}<esc>3kf(a
-imap \f for (int i = 0; i < 10 ;i++)<CR>{<CR><CR>}<esc>3kf;la
-imap \c class N<CR>{<CR><BS>private:<CR>int A;<CR><BS>public:<CR>int B(int C);<CR>N(int I);<CR>~N();<CR><BS>};<esc>8k0fNa
-imap \mp #include <iostream><CR><CR>int main(int argc, char* argv[])<CR>{<CR><CR>return 0;<CR><BS>}<C-o>2k<Tab>
-"c, c++, java  
+
+imap \i if (<++>)<CR>{<CR><++><CR>}
+imap \s switch (<++>)<CR>{<CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><CR>}<C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>a
+imap \w while (<++>)<CR>{<CR><++><CR>}<C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>a
+imap \f for (<++>; <++>;<++>)<CR>{<CR><++><CR>}<C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>a
+imap \c class <++><CR>{<CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<CR><BS>};<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>a
+imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{<CR><++><CR>return 0;<CR><BS>}<C-o>?<++><CR><C-o>:noh<CR><Tab>
+imap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
+"c, c++
+
 inoremap <C-z> <C-o>u
 inoremap <C-u> <C-o><C-r>
 inoremap <C-s> <C-o>:w<CR>
 inoremap <C-x> <C-o>dd
 inoremap <C-c> <C-o>yy
-inoremap <C-v> <C-o>P
+inoremap <C-v> <C-o>p
 inoremap <C-b> <C-v>
 "some single mode notepad keymap 对常见单模式文本编辑器快捷键的补充  
 inoremap <M-h> <Left>
@@ -208,7 +227,6 @@ inoremap ( <ESC>:call InsertPairs('(', ')')<CR>i
 inoremap [ <ESC>:call InsertPairs('[', ']')<CR>i
 inoremap { <ESC>:call InsertPairs('{', '}')<CR>i
 " 括号补全 特别地 如果下一个字符是右括号 不会进行补全 避免出现重复字符
-
 function! RemoveNextDoubleChar(char)
 	let l:line = getline(".")
 	let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
@@ -253,7 +271,6 @@ function! RemoveEmptyPairs()
 		end
 	end
 endfunction
-
 " 按退格键时判断当前光标前一个字符，如果是左括号，则删除对应的右括号以及括号中间的内容
 function! RemovePairs()
 	let l:line = getline(".")
@@ -294,14 +311,20 @@ function! RemovePairs()
 		end
 	end
 endfunction
-
 " 用退格键删除一个左括号时同时删除对应的右括号
-inoremap ,, <ESC>:call RemovePairs()<CR>a
+inoremap ,d <ESC>:call RemovePairs()<CR>a
 "inoremap <BS> <ESC>:call RemoveEmptyPairs()<CR>a
 "括号删除 https://juejin.im/entry/6844903473050304526
 inoremap \= <CR><ESC>ddkPI
 inoremap \- <ESC>ddpXi
 "向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
+inoremap ,a <++>
+inoremap ,n <C-o>/<++><CR><C-o>:noh<CR>
+inoremap ,N <C-o>?<++><CR><C-o>:noh<CR>
+inoremap ,c <C-o>/<+<-->+><CR><C-o>:noh<CR><C-o>da<
+inoremap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o>da<
+"打锚点<++>; `,a`添加; `,n`向下搜索; `,N`向上搜索;
+"`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
 
 "theme
 "Credit joshdick
@@ -336,6 +359,6 @@ if(has('gui_running'))
 elseif(has('nvim'))
 	"set guifont=黑体:h17
 	set guifont=SimHei:h17
-	"1080p mode, will return WARNING but able to use
+	"1080p mode, will return WARNING but aable to use
 	"some language in windows need 黑体 instand of SimHei
 endif
