@@ -319,11 +319,11 @@ inoremap \= <CR><ESC>ddkPI
 inoremap \- <ESC>ddpXi
 "向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
 inoremap ,a <++>
-inoremap ,n <C-o>/<++><CR><C-o>:noh<CR>
-inoremap ,N <C-o>?<++><CR><C-o>:noh<CR>
-inoremap ,c <C-o>/<+<-->+><CR><C-o>:noh<CR><C-o>da<
+inoremap ,f <C-o>/<++><CR><C-o>:noh<CR>
+inoremap ,F <C-o>?<++><CR><C-o>:noh<CR>
+inoremap ,c <C-o>/<++><CR><C-o>:noh<CR><C-o>da<
 inoremap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o>da<
-"打锚点<++>; `,a`添加; `,n`向下搜索; `,N`向上搜索;
+"打锚点<++>; `,a`添加; `,f`向下搜索; `,F`向上搜索;
 "`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
 
 "Plugin
