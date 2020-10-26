@@ -14,8 +14,8 @@ REM vanilla 原版无插件
 
 echo [GET] install %1 %2
 
-set vimrcPath=%USERPROFILE%
-set neovimrcPath=%USERPROFILE%\AppData\Local\nvim
+set vimrcPath=~
+set neovimrcPath=~\AppData\Local\nvim
 
 REM 变换参数 bat没有提供逻辑or以及and
 set willChangeVim=n
@@ -61,6 +61,9 @@ if "%vaildParamater%" == "y" (
 	REM 有neovim配置文件时询问是否覆盖(会进行备份)
 	if "%willChangeNeoVim%" == "y" (
 		REM 如果没有nvim文件夹则创建一个
+		if NOT exist %neovimrcPath%\init.vim (
+			mkdir %neovimrcPath%
+		)
 		if exist %neovimrcPath%\init.vim (
 			set /p needRecoverNeoVim="NeoVim: find'init.vim' already exist, want to replace?(origin ,vim will be backup)(y/n)"
 			REM 已经有备份 将进行警告
@@ -142,14 +145,14 @@ if "%vaildParamater%" == "y" (
 ) else (
 echo -----------------------------
 echo [ERROR] Missing or incorrect parameters 缺少参数或参数错误
-echo 格式: install $1 $2
+echo 格式: install %1 %2
 echo -------------------
-echo $1
+echo %1
 echo all 添加vim与neovim配置文件
 echo vim 仅添加vim
 echo neovim 仅添加neovim
 echo -------------------
-echo $2
+echo %2
 echo plugin 插件
 echo vanilla 原版无插件
 echo -----------------------------

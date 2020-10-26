@@ -4,6 +4,7 @@
 ----------------------
 
 ## 索引
+
 - [文档规则说明](#文档规则说明)
 - [最基础操作](#最基础操作)
     - [启动](#启动)
@@ -36,7 +37,7 @@
     - [定位 Move](#定位-Move)
     - [语言 Language](#语言-Language)
 	- [函数 Function](#函数-Function)
-- [插件](#插件-Plugin)
+- [插件 Plugin](#插件-Plugin)
     - [使用方法](#使用方法)
     - [Vim-Plug常用指令](#Vim-Plug常用指令])
     - [插件推荐](#插件推荐)
@@ -262,6 +263,42 @@ h<--+-->l
 输入 `diw` 剪切 `Hello`; 输入 `yi"` 复制 `Hello world!`; 输入 `ya"` 复制 `"Hello world!"`  
 
 > `printf("Hello world!");`  
+
+### 折叠 Fold
+[来源链接](https://www.cnblogs.com/zlcxbb/p/6442092.html)
+- 折叠有多种模式 通过set fdm="mode" 进行设置 使用set fdm查看当前模式  
+  不同模式无法同时使用
+1. manual 手动(默认模式)  
+   手动进行折叠管理
+
+`zf<motion>` fold 创建折叠 例: `zfap` 当前段落创建折叠  
+`zd` delete       删除当前折叠(仅一层) `zD` 删除当前折叠(含嵌套)  
+`zE` eliminate    删除当前窗口所有折叠
+
+`zo` open  打开折叠  
+`zr` reduce 打开所有折叠(仅一层) `zR` 打开所有折叠(含嵌套)  
+
+`zc` close 关闭折叠  
+`zm` more  关闭所有折叠(仅一层) `zM` 关闭所有折叠(含嵌套)  
+
+**vim不会自动保存折叠信息** 可用``
+
+2. indent 缩进  
+   通过缩进(空格或tab)进行自动折叠
+
+可用`zo` `zr`等打开关闭 但无法创建或删除折叠标签 除手动模式外的其他模式同理
+
+3. expr 表达式
+   通过表达式来定义折叠
+
+4. syntax 语法高亮
+   通过语法高亮来定义折叠
+
+5. diff 变更
+   文本中没有更改的部分自动进行折叠
+
+6. marker 标记
+   通过文中标记判断折叠 默认是`{{{`和`}}}`
 
 ### 宏 Macro
 `q<letter>` 开始宏记录 记录到`<letter>`宏寄存器中 `q` 停止宏记录  
@@ -543,7 +580,8 @@ imap /f <CR>for (int i = 0; ;i++){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><
 > `map <space><space> <leader><leader>` "空格键映射为\<leader>时需要双映射 否则可能出现重复输入的bug  
 
 - 特殊键  
-- [参考链接](https://blog.csdn.net/JasonDing1354/article/details/45372007)  
+
+[参考链接](https://blog.csdn.net/JasonDing1354/article/details/45372007)  
 
 | vim配置中的使用    | 实际表示                    |
 | ------------------ | --------------------------- |
@@ -562,92 +600,7 @@ imap /f <CR>for (int i = 0; ;i++){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><
 
 - 推荐配置  
 
-```
-"Keymap
-"let mapleader="<space>"
-"map <space><space> <leader><leader>
-
-noremap s :w<CR>
-"[s] to save file 保存
-noremap ; :
-"make enter command easiler([;]) 更方便进入命令行模式
-noremap <C-,> ;
-"[fFtT] can search faster: [,] go backword and [ctrl+,] go forword
-"更方便行内查找 并且避开因进入命令行模式按键修改的不兼容
-noremap r R
-"[r] will entery Replace mdoe[R]
-"因为[R]用于文件处理了 更改[r]为原[R]进入替换模式 比单字符替换更适用 
-map R <nop>
-"[R*] File&Profile 文件与配置相关
-map RH <C-w>s:e $VIMDOC<CR><C-w>15+
-"[RH] open help file need to define $VIMDOC 开启自定义说明文档 需要定义变量
-if(has('nvim'))
-	map RC :source $MYNEOVIMRC<CR>
-	map RE <C-w>v:e $MYNEOVIMRC<CR>
-else
-	map RC :source $MYVIMRC<CR>
-	map RE <C-w>v:e $MYVIMRC<CR>
-endif
-"[RC] hot reload vimrc; [RE] fast open to edit vimrc; will use different vimrc(init.vim) if neovim; need to define $MYVIMRC, $MYNEOVIMRC
-"windows下并不会自动定义$MYVIMRC 而$MYNEOVIMRC完全是手动设定以方便分开更改的 因此并不能作为参考
-"开启与重载vim配置文件 需要定义变量
-noremap <C-h> 5h
-noremap <C-j> 5j
-noremap <C-k> 5k
-noremap <C-l> 5l
-"[ctal+hjkl] to move faster 快速方向移动
-map S <nop>
-"[S*] Split&Tabs 分屏与标签页相关
-map SA :set nosplitright<CR>:vsplit<CR>
-map SS :set splitbelow<CR>:split<CR>
-map SW :set nosplitbelow<CR>:split<CR>
-map SD :set splitright<CR>:vsplit<CR>
-"[S][WASD] to open new split in hjkl side 四向分屏
-"相比自带的[ctrl+w][sv]或`:split :vsplit`更快捷
-noremap <C-up> :res +5<CR>
-noremap <C-down> :res -5<CR>
-noremap <C-left> :vertical resize -5<CR>
-noremap <C-right> :vertical resize +5<CR>
-"[ctrl+arrow key] to zoom split size 调整分屏窗口尺寸
-map ST :tabedit 
-"[ST] to new tab 新建标签页
-if(has('nvim'))
-	noremap <C--> :noh<CR>
-else
-	noremap <C-_> :noh<CR>
-endif
-"[ctrl+'-'(minus)] to hidden search result highlight 关闭搜索高亮显示
-noremap <F5> :call CompileRunProg()<CR>
-func CompileRunRrog()
-	exec "w"
-	if &filetype == 'markdown'
-		exec "MarkdownPreview"
-	else
-		exec "echo "Unknown language!""
-	endif
-endfunc
-"[F5] to auto complie 一键保存并编译
-
-"Keymap-Insert mode 插入模式下的快速操作
-inoremap /h1 # 
-inoremap /h2 ## 
-inoremap /h3 ### 
-inoremap /h4 #### 
-inoremap /h5 ##### 
-inoremap /h6 ###### 
-inoremap /c ``<Left>
-inoremap /b ``````<Left><Left><Left><CR><CR><Up>
-inoremap /l <CR>----------------------<CR>
-"markdown
-imap /i <CR>if (){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f(a
-imap /w <CR>while (){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f(a
-imap /f <CR>for (int i = 0; ;i++){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f;a<Right>
-"c, c++, java
-imap <C-z> <esc>ua
-imap <C-u> <esc><C-r>a
-imap <C-s> <esc>:w<CR>a
-"some single mode notepad keymap 对常见单模式文本编辑器快捷键的补充
-```
+见[.vimrc](.vimrc)
 
 ### 兼容性&修复 Fix
 `set nocompatible`  
@@ -969,7 +922,6 @@ nmap <Leader>d :ALEDetail<CR>
 " <CR>: custom open
 "
 " ----------------------------
-"
 ```
 
 - [参考链接](https://www.cnblogs.com/littlewrong/p/6535728.html)  
@@ -1126,8 +1078,6 @@ eitherThanOsu = 820
 
 `<leader>ca` 切换另一种注译符 如果当前文本语言有的话(`<leader>cm`仍然只使用块注译)  
 
-----------------------
-
 ## 记录 Changelog
 RC1.2 2020/09/23-01/26
 添加了终端模式 补充了一些插件 还有些杂七杂八的
@@ -1145,8 +1095,6 @@ RC1 2020/09/11-04/20
 RC0 2020/09/09-03/01  
 随着基本功能的学习完成 这本vim操作笔记也自认为完成了初版  
 字数也从0开始到现在近5000了 应该有许多不严谨的地方 毕竟是边学边加的笔记  
-
-----------------------
 
 ## 贡献者
 Wufe8  
