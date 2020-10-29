@@ -1,6 +1,5 @@
 #!/bin/bash
-
-clear 
+clear
 
 #格式: install $1 $2
 #-------------------
@@ -22,101 +21,101 @@ neovimrcPath=~/.config/nvim
 willChangeVim=n
 willChangeNeoVim=n
 vaildParamater=y
-if [ "$1" == "all"  ]
+if [ "$1" == "all" ]
+then
+willChangeVim=y
+willChangeNeoVim=y
+elif [ "$1" == "vim" ]
 then
 	willChangeVim=y
-	willChangeNeoVim=y
-elif [ "$1" == "vim"  ]
-then
-	willChangeVim=y
-elif [ "$1" == "neovim"  ]
+elif [ "$1" == "neovim" ]
 then
 	willChangeNeoVim=y
 else
 	vaildParamater=n
 fi
 
-if [ "$vaildParamater" == "y"  ]
+if [ "$vaildParamater" == "y" ]
 then
-	if [ "$2" == "vanilla"  ]
+	if [ "$2" == "vanilla" ]
 	then
 		vaildParamater=y
-	elif [ "$2" == "plugin"  ]
+	elif [ "$2" == "plugin" ]
 	then
 		vaildParamater=y
 	else
 		vaildParamater=n
-	fi	
+	fi
 fi
 
 echo [DEBUG] vaildParamater $vaildParamater
 
-if [ "$vaildParamater" == "y"  ]
+if [ "$vaildParamater" == "y" ]
 then
 	willBackupVim=y
 	willBackupNeoVim=y
 	#有vim配置文件时询问是否覆盖(会进行备份)
-	if [ "$willChangeVim" == "y"  ]
+	if [ "$willChangeVim" == "y" ]
 	then
-		if [ -e $vimrcPath/.vimrc  ]
+		if [ -e $vimrcPath/.vimrc ]
 		then
 			echo "Vim: find'.vimrc' already exist, want to replace?(origin ,vim will be backup)(y/n)"
 			read willChangeVim
 			#已经有备份 将进行警告
-			if [ -e $vimrcPath/.vimrc.BACKUP  ]
+			if [ -e $vimrcPath/.vimrc.BACKUP ]
 			then
 				echo "find $vimrcPath/.vimrc.BACKUP, are you sure to replace BACKUP?(y/n)"
 				read willBackupVim
-			fi	
-		fi	
-	fi	
+			fi
+		fi
+	fi
 	#有neovim配置文件时询问是否覆盖(会进行备份)
-	if [ "$willChangeNeoVim" == "y"  ]
+	if [ "$willChangeNeoVim" == "y" ]
 	then
 		#如果没有nvim文件夹则创建一个
-		if [ ! -e $neovimrcPath  ]
+		if [ ! -e $neovimrcPath ]
 		then
 			mkdir $neovimrcPath
 		fi
-		if [ -e $neovimrcPath/init.vim  ]
+		if [ -e $neovimrcPath/init.vim ]
 		then
 			echo "NeoVim: find'init.vim' already exist, want to replace?(origin ,vim will be backup)(y/n)"
 			read willChangeNeoVim
 			#已经有备份 将进行警告
-			if [ -e $neovimrcPath/init.vim.BACKUP  ]
+			if [ -e $neovimrcPath/init.vim.BACKUP ]
 			then
 				echo "find $neovimrcPath/init.vim.BACKUP, are you sure to continue?(y/n)"
 				read willBackupNeoVim
-			fi	
-		fi	
-	fi	
+			fi
+		fi
+	fi
 	echo
 	echo [DEBUG] willChangeVim $willChangeVim
 	echo [DEBUG] willChangeNeoVim $willChangeNeoVim
 	echo [DEBUG] willBackupVim $willBackupVim
 	echo [DEBUG] willBackupNeoVim $willBackupNeoVim
 	echo
-	#有插件配置模式 
-	if [ "$2" == "plugin"  ]
+	#有插件配置模式
+	if [ "$2" == "plugin" ]
 	then
 		#判断是否需要变动vim文件 $1应为all或vim
-		if [ "$willChangeVim" == "y"  ]
+		if [ "$willChangeVim" == "y" ]
 		then
 			#Vim安装Plugins
-			if [ ! -e $vimrcPath/.vim  ]
+			if [ ! -e $vimrcPath/.vim ]
 			then
 				mkdir $vimrcPath/.vim
-			fi	
-			if [ ! -e $vimrcPath/.vim/autoload  ]
+			fi
+			if [ ! -e $vimrcPath/.vim/autoload ]
 			then
 				mkdir $vimrcPath/.vim/autoload
-			fi	
-			if [ ! -e $vimrcPath/.vim/autoload/plug.vim  ]
+			fi
+			if [ ! -e $vimrcPath/.vim/autoload/plug.vim ]
 			then
-				cp ./.vim/autoload/plug.vim $vimrcPath/.vim/autoload/plug.vim 
-			fi 
-			#备份vim配置文件 
-			if [ "$willBackupVim" == "y"  ]
+				cp ./.vim/autoload/plug.vim $vimrcPath/.vim/autoload/plug.vim
+			fi
+			#备份vim配置文件
+			if [ "$willBackupVim" == "y" ]
 			then
 				cp $vimrcPath/.vimrc $vimrcPath/.vimrc.BACKUP
 				echo "backup at $vimrcPath/.vimrc.BACKUP"
@@ -125,25 +124,25 @@ then
 				cp ./.vimrc $vimrcPath/.vimrc
 			else
 				cp ./.vimrc $vimrcPath/.vimrc
-			fi	
+			fi
 			PlugInstall=y
 		else
 			echo [INFO] skipped vim profile
-		fi	
+		fi
 		#判断是否需要变动neovim文件 $1应为all或neovim
-		if [ "$willChangeNeoVim" == "y"  ]
+		if [ "$willChangeNeoVim" == "y" ]
 		then
 			#NeoVim安装Plugins
-			if [ ! -e $neovimrcPath/autoload  ]
+			if [ ! -e $neovimrcPath/autoload ]
 			then
 				mkdir $neovimrcPath/autoload
-			fi	
-			if [ ! -e $neovimrcPath/autoload/plug.vim  ]
+			fi
+			if [ ! -e $neovimrcPath/autoload/plug.vim ]
 			then
 				cp ./.vim/autoload/plug.vim $neovimrcPath/autoload/plug.vim
-			fi	
+			fi
 			#备份neovim配置文件
-			if [ "$willBackupNeoVim" == "y"  ]
+			if [ "$willBackupNeoVim" == "y" ]
 			then
 				cp $neovimrcPath/init.vim $neovimrcPath/init.vim.BACKUP
 				echo "backup at $neovimrcPath/init.vim.BACKUP"
@@ -152,11 +151,11 @@ then
 				cp ./.vimrc $neovimrcPath/init.vim
 			else
 				cp ./.vimrc $neovimrcPath/init.vim
-			fi	
+			fi
 			PlugInstall=y
 		else
 			echo [INFO] skipped neovim profile
-		fi	
+		fi
 		# 安装 编译插件以及依赖整理
 		if [ "$PlugInstall" == "y" ]
 		then
@@ -170,7 +169,7 @@ then
 			else
 				echo [INFO] some plugin will need them, make sure you will install them later if you need these plugin
 			fi
-			if [ "$willChangeNeoVim" == "y"  ]
+			if [ "$willChangeNeoVim" == "y" ]
 			then
 				# 为python以及nodejs安装neovim支持 部分插件需要
 				echo "would you like to install neovim support about python3 and nodejs? required python pip & nodejs npm.(y/n)"
@@ -200,7 +199,7 @@ then
 			echo [DEBUG] compilePlugin $compilePlugin
 			if [ "$compilePlugin" == "y" ]
 			then
-				python $vimrcPath/.vim/plugged/YouCompleteme/install.py --all
+				python3 $vimrcPath/.vim/plugged/YouCompleteme/install.py --all
 				echo=
 				npm install $vimrcPath/.vim/plugged/markdown-preview.nvim
 			else
@@ -208,8 +207,8 @@ then
 			fi
 			echo [INFO] besides, tagbar depend ctags, make sure you add ctags into PATH if you need tagbar plugin
 		fi
-	#无插件配置文件 
-	elif [ "$2" == "vanilla"  ]
+	#无插件配置文件
+	elif [ "$2" == "vanilla" ]
 	then
 		if [ "$willChangeVim" == "y" ]
 		then
@@ -222,10 +221,10 @@ then
 				cp ./vanilla.vimrc $vimrcPath/.vimrc
 			else
 				cp ./vanilla.vimrc $vimrcPath/.vimrc
-			fi	
+			fi
 		else
 			echo [INFO] skipped vim profile
-		fi	
+		fi
 		if [ "$willChangeNeoVim" == "y" ]
 		then
 			if [ "$willBackupNeoVim" == "y" ]
@@ -237,31 +236,30 @@ then
 				cp ./vanilla.vimrc $neovimrcPath/init.vim
 			else
 				cp ./vanilla.vimrc $neovimrcPath/init.vim
-			fi	
+			fi
 		else
 			echo [INFO] skipped neovim profile
-		fi	
-	fi	
+		fi
+	fi
 	echo "press enter to continue"
 	read
-	
 	exit
 else
-echo -----------------------------
-echo [ERROR] Missing or incorrect parameters 缺少参数或参数错误
-echo 格式: install \$1 \$2
-echo -------------------
-echo \$1
-echo all 添加vim与neovim配置文件
-echo vim 仅添加vim
-echo neovim 仅添加neovim
-echo -------------------
-echo \$2
-echo plugin 插件
-echo vanilla 原版无插件
-echo -----------------------------
-echo "press enter to continue"
-read
+	echo -----------------------------
+	echo [ERROR] Missing or incorrect parameters 缺少参数或参数错误
+	echo 格式: install \$1 \$2
+	echo -------------------
+	echo \$1
+	echo all 添加vim与neovim配置文件
+	echo vim 仅添加vim
+	echo neovim 仅添加neovim
+	echo -------------------
+	echo \$2
+	echo plugin 插件
+	echo vanilla 原版无插件
+	echo -----------------------------
+	echo "press enter to continue"
+	read
 
-exit
+	exit
 fi

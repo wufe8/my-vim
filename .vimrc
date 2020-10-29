@@ -186,12 +186,12 @@ inoremap \b ``````<Left><Left><Left><CR><CR><Up>
 inoremap \l <CR>----------------------<CR>
 "markdown  
 
-imap \i if (<++>)<CR>{<CR><++><CR>}
-imap \s switch (<++>)<CR>{<CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><CR>}<C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>a
-imap \w while (<++>)<CR>{<CR><++><CR>}<C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>a
-imap \f for (<++>; <++>;<++>)<CR>{<CR><++><CR>}<C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>a
-imap \c class <++><CR>{<CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<CR><BS>};<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>a
-imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{<CR><++><CR>return 0;<CR><BS>}<C-o>?<++><CR><C-o>:noh<CR><Tab>
+imap \i if (<++>)<CR>{<CR><++>
+imap \s switch (<++>)<CR>{<CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \w while (<++>)<CR>{<CR><++><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \f for (<++>; <++>;<++>)<CR>{<CR><++><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \c class <++><CR>{<CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{<CR><++><CR>return 0;<C-o>?<++><CR><C-o>:noh<CR><Tab>
 imap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
 "c, c++
 

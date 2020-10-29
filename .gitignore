@@ -8,6 +8,8 @@ issue*
 test
 testPageWin
 testPageUnix
+node_modules
+package-lock.json
 
 !.vimrc
 !.config/nvim/init.vim
