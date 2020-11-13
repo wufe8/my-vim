@@ -48,6 +48,7 @@
     - [tagbar-代码结构管理](#Tagbar)
     - [tabular-快速对齐](#Tabular)
 	- [NERDCommenter-快速注释](#NERDCommenter)
+	- [vim-surround-快速变更包裹符](#vim-surround)
 - [记录 Changelog](#记录-Changelog)
 - [贡献者](#贡献者)
 - [许可 LICENSE](#许可-LICENSE)
@@ -59,27 +60,27 @@
 
 \<astring1/string2> 使用string1或string2代替 更多"/"时同理(如"\<file>"指使用文件名代替)  
 
-| 例        | 意义                 |
-| :-------- | -------------------  |
-| bool      | 布尔值(0或1)         |
-| direction | 方向 即上下左右      |
-| n         | 数字                 |
-| char      | 字符                 |
-| latter    | 字母(a-z,A-Z)        |
-| symbol    | 符号                 |
-| string    | 字符串               |
-| file      | 文件名               |
-| folder    | 文件夹名             |
-| operation | 命令模式-指令        |
-| command   | 命令行模式-指令      |
-| motion    | 命令模式-附加字符    |
-| option    | 命令行模式-附加参数  |
-| function  | 函数名               |
-| CR        | 回车                 |
-| BS        | 退格                 |
-| Leader    | vim特殊键 默认是`\`  |
-| nop       | 空(vim中\<nop>即空)  |
-| enum      | 枚举值 一般另有说明  |
+| 例        | 意义                            |
+| :-------- | ------------------------------- |
+| bool      | 布尔值(0或1)                    |
+| direction | 方向 即上下左右                 |
+| n         | 数字                            |
+| char      | 字符                            |
+| latter    | 字母(a-z,A-Z)                   |
+| symbol    | 包裹符(括号 引号之类的成对符号) |
+| string    | 字符串                          |
+| file      | 文件名                          |
+| folder    | 文件夹名                        |
+| operation | 命令模式-指令                   |
+| command   | 命令行模式-指令                 |
+| motion    | 命令模式-附加字符               |
+| option    | 命令行模式-附加参数             |
+| function  | 函数名                          |
+| CR        | 回车                            |
+| BS        | 退格                            |
+| Leader    | vim特殊键 默认是`\`             |
+| nop       | 空(vim中\<nop>即空)             |
+| enum      | 枚举值 一般另有说明             |
 
 \[c0/c1/c2\] 可选 一般指代按键枚举值
 
@@ -148,8 +149,8 @@ shell --`vim <gfile>`->  普通模式   --`a`-`i`-`o`-->插入模式<--T
 
 ## 普通模式
 > 通用格式 `<n><operation><n><motion>`(没有空格)  
-> `n`即重复执行次数/范围 可选; `<motion>`操作符需要指定范围的都必选  
-> 在操作前后输入\<n>皆可 但含义其实不同 一般在前指该操作执行1次操作n行 而在后指执行n次每次操作1行  
+> `n`即重复执行次数/范围 可选; `<motion>`操作符对于需要指定范围的`<operation>`来说必选(`y` `c` `d`)  
+> 在操作前后输入\<n>皆可 但含义其实不同 一般在前指该操作执行n次操作1行 而在后指执行1次每次操作n行 (可以叠加 如`5y5j`对光标往下5x5=25行进行复制)  
 > 输入过程中按`<Esc>`取消  
 
 ### 操作符 Operation
@@ -256,9 +257,9 @@ h<--+-->l
 - `a<enum>` all 将操作范围作用在\<enum>内(包含\<enum>)  
 - `t<enum>` till 将操作范围作用到\<enum>前(不包含\<enum>) 一般是的默认项 基本可用`f<char>`代替  
 
-\<enum>可以为:  
-`w` 单词; `s` 句子(以`.`进行识别); `p` 段落(以`\n`(空行)进行识别)  
-也可以为括号 引号类的成对符号\<symbol>  
+> \<enum>可以为:  
+> `w` 单词; `s` 句子(以`. ! ? :`等进行识别); `p` 段落(以`\n`(空行)进行识别)  
+> `<symble>`包裹符(括号 引号之类的成对符号)  
 
 案例示例:  
 输入 `diw` 剪切 `Hello`; 输入 `yi"` 复制 `Hello world!`; 输入 `ya"` 复制 `"Hello world!"`  
@@ -461,7 +462,7 @@ h<--+-->l
 > 启用鼠标的情况下 可以通过点击窗口来直接切换当前聚焦  
 
 `:split <file>` 上下分屏 默认为当前文件  
-如果只是分屏当前文件 可`[ctrl+w][v]` ** 先输入^W 再输入v ** 以下不再赘述  
+如果只是分屏当前文件 可`[ctrl+w][v]` **先输入^W 再输入v** 以下不再赘述  
 
 `:vsplit \<file>` 左右分屏 默认为当前文件  
 如果只是分屏当前文件 可`[ctrl+w][s]`  
@@ -1084,9 +1085,50 @@ eitherThanOsu = 820
 
 `<leader>ca` 切换另一种注译符 如果当前文本语言有的话(`<leader>cm`仍然只使用块注译)  
 
+### vim-surround
+- [github仓库](https://github.com/tpope/vim-surround)  
+
+这个插件可以快速对包裹符(如括号)进行更改 或者说对原版vim的附加操作的增强 特别对html xml类的标签有特别的支持  
+如[附加操作 Motion](#附加操作-Motion)所表 `[a/i/t]+<symbel>`可对包裹符进行不同的圈定 该插件操作类似 但注意并不是\<motion> 而是在\<motion>之前  
+
+- 格式为`<operation>s<motion>`  
+
+本插件对需要\<motion>圈定范围的操作添加了`s` surround:
+- `s<enum0>` 将操作范围作用在头尾上的\<enum0>  
+- `s<enum0><enum1>` 将操作范围作用在 *\<enum0>所包含的字符串* 头尾上的\<enum0> 并输出目标\<enum1>(此为操作`c/y`限定 作用为替换包裹符)  
+
+> \<enum0>可以为:  
+> `w` 单词; `s` 句子(以`. ! ? :`等进行识别); `p` 段落(以`\n`(空行)进行识别) `t` 任意类html标签 如`<q>`  
+> `<symble>`包裹符(括号 引号之类的成对符号)  
+
+> \<enum1>可以为:  
+> `<symble>`包裹符(括号 引号之类的成对符号)  
+> 类html标签 如`<q>` 将表示`<q> HelloWorld! </q>` 中的`<q>以及</q>`  
+
+以下案例指代:  
+`"Hello world!"`  
+
+案例中输入`cs"'`:  
+`'Hello world!'`  
+
+案例中输入`cs"<h1>`:  
+`\<h1>Hello world!\</h1>`  
+
+案例中输入`ds"`:  
+`Hello world!`  
+
+案例中输入`ysiw[`(似乎重载为了`g@iw[`):  
+`"Hello world!"`  
+
+案例中输入`yss(`:  
+`( "Hello world!" )`  
+
 ## 记录 Changelog
-RC1.2 2020/09/23-01/26
-添加了终端模式 补充了一些插件 还有些杂七杂八的
+RC1.32 2020/11/14-00/36  
+添加了更多插件 添加了fold(折叠)  
+
+RC1.2 2020/09/23-01/26  
+添加了终端模式 补充了一些插件 还有些杂七杂八的  
 
 RC1.1 2020/09/12-00/15  
 增加了一些细节  
