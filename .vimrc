@@ -1,13 +1,15 @@
 "This .vimrc(or init.vim) is for dairy use  
 "by wufe8  
 
-"Autocmd
-if has("nvim")
-	autocmd vimenter * set splitbelow
-	autocmd vimenter * split
-endif
-autocmd vimenter * term
-autocmd vimenter * resize 7
+"----------------------
+"autocmd 启动执行
+"----------------------
+"if has("nvim")
+	"autocmd vimenter * set splitbelow
+	"autocmd vimenter * split
+"endif
+"autocmd vimenter * term
+"autocmd vimenter * resize 7
 "开启内置终端
 "if(has('nvim') && has('win32'))
 	"autocmd vimenter * tabedit $MYNEOVIMRC
@@ -26,7 +28,9 @@ autocmd vimenter * resize 7
 "autocmd vimenter * NERDTree
 "开启tagbar以及NERDTree
 
-"BugFix  
+"----------------------
+"BugFix 错误修复  
+"----------------------
 set nocompatible
 "set term=screen-256color  
 filetype on
@@ -36,7 +40,9 @@ let &t_ut=''
 set backspace=indent,eol,start
 "now \<BR> can be using at start  
 
+"----------------------
 "View 显示  
+"----------------------
 syntax on
 "color mode 显示行数  
 set number
@@ -70,7 +76,9 @@ set splitbelow
 set splitright
 "`vsplit` will open in the right of origin window(default is `nosplitright`)) 创建默认垂直分屏窗口将创建在相对原窗口的右方 而非左方  
  
+"----------------------
 "Edit 编辑  
+"----------------------
 set ignorecase
 "searching will ignore case 搜索时忽略大小写  
 set smartcase
@@ -78,12 +86,16 @@ set smartcase
 set clipboard+=unnamed
 "if \"+=unnamed" vim clipboard will share with system clipboard  
  
-"Move  
+"----------------------
+"Move 移动  
+"----------------------
 set scrolloff=8
 set whichwrap=b,s,h,l,<,>,[,]
 set mouse=nv
  
-"Language  
+"----------------------
+"Language 语言  
+"----------------------
 set fileencodings=utf-8,ucs-bom,shift-jis,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set encoding=utf-8
 "set termencoding=utf-8  
@@ -94,14 +106,16 @@ set fencs=utf-8,ucs-bom,shift-jis,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set ambiwidth=double
 "fix some word only graph half  
 
-"Keymap  
+"----------------------
+"Keymap 映射  
+"----------------------
 "let mapleader="<space>"  
 "map <space><space> <leader><leader>  
  
 map s <nop>
 map ss :w<CR>
 "[ss] to save file 保存  
-"锁定屏幕 <C-q>解除
+"锁定屏幕 <C-q>解除  
 noremap ; :
 "make enter command easiler([;]) 更方便进入命令行模式  
 map + <C-a>
@@ -110,10 +124,10 @@ map - <C-x>
 noremap <C-,> ;
 noremap <M-,> ,
 "[fFtT] can search faster: [ctrl+,] go backword and [alt+,] go forword  
-"更方便行内查找 并且避开因进入命令行模式按键修改的不兼容  
+"更方便行内查找 并且避开进入命令行模式以及锚点相关按键修改的不兼容  
 noremap r R
 "[r] will entery Replace mdoe[R]  
-"因为[R]用于文件处理了 更改[r]为原[R]进入替换模式 比单字符替换更适用   
+"因为[R]用于文件处理了 更改[r]为原[R]进入替换模式 比单字符替换更适用  
 map R <nop>
 "[R*] File&Profile 文件与配置相关  
 map RH <C-w>v:e $VIMDOC<CR><C-w>15+
@@ -136,9 +150,9 @@ noremap <C-l> 5l
 "[ctal+hjkl] to move faster 快速方向移动  
 map <M-Down> <C-w>p5j<C-w>p
 map <M-Up> <C-w>p5k<C-w>p
-"[alt][Up/Down] 将进行另一分屏的移动 更适用快速浏览说明文档  
-noremap <M-j> gj
-noremap <M-k> gk
+"[alt][Up/Down] 将进行另一分屏的移动 更适用快速浏览说明文档
+map <M-j> gj
+map <M-k> gk
 "[alt][j/k] 将进行屏幕渲染行移动 更适用与实际编辑时的自动换行  
 "同时上项的noremap <C->将不受影响 仍然为实际行跳转  
 map S <nop>
@@ -165,7 +179,7 @@ else
 	noremap <C-_> :noh<CR>
 endif
 "[ctrl+'-'(minus)] to hidden search result highlight 关闭搜索高亮显示  
-"[ctrl+'/'] in linux  
+"[ctrl+'/'] in linux
 "noremap <F5> :call CompileRunProg()<CR>  
 "func CompileRunRrog()
 "	exec "w"
@@ -218,11 +232,16 @@ inoremap <C-h> <Left><Left><Left><Left><Left>
 inoremap <C-j> <Down><Down><Down><Down><Down>
 inoremap <C-k> <Up><Up><Up><Up><Up>
 inoremap <C-l> <Right><Right><Right><Right><Right>
+imap <M-Down> <C-o><C-w>p<C-o>5j<C-o><C-w>p
+imap <M-Up> <C-o><C-w>p<C-o>5k<C-o><C-w>p
+"[alt][Up/Down] 将进行另一分屏的移动 更适用快速浏览说明文档
 "[ctal+direction] can be use in insert mode  
 "插入模式下可通过[ctrl+方向键]实现更快速的移动  
 "<M-hjkl> may not be run in linux+vim, but can be map in neovim
 
+"----------------------
 "括号的自动补全 效率与智能较低
+"----------------------
 "function! InsertPairs(charOpen, charClose)
     "let l:line = getline(".")
     "let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
@@ -279,6 +298,7 @@ inoremap <C-l> <Right><Right><Right><Right><Right>
     "end
 "endfunction
 " 按退格键时判断当前光标前一个字符，如果是左括号，则删除对应的右括号以及括号中间的内容
+
 function! RemovePairs()
 	let l:line = getline(".")
 	let l:previous_char = l:line[col(".")-1] " 取得当前光标前一个字符
@@ -339,8 +359,8 @@ noremap ,s :call BoolSwitch()<CR>
 inoremap ,s <ESC>:call BoolSwitch()<CR>a
 "Switch between True and False
 
-inoremap \= <CR><ESC>ddkPI
-inoremap \- <ESC>ddpXi
+imap \= <CR><ESC>ddkPI
+imap \- <ESC>ddpXi
 "向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
 map ,f /<++><CR>:noh<CR>
 map ,F ?<++><CR>:noh<CR>
@@ -351,10 +371,12 @@ imap ,f <C-o>/<++><CR><C-o>:noh<CR>
 imap ,F <C-o>?<++><CR><C-o>:noh<CR>
 imap ,c <C-o>/<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
-"打锚点<++>; `,a`添加; `,f`向下搜索; `,F`向上搜索;
+"打锚点<++>; `,a`添加; `,n`向下搜索; `,N`向上搜索;
 "`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
 
-"Plugin
+"----------------------
+"Plugin 插件
+"----------------------
 call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 "rular栏美化
@@ -409,7 +431,9 @@ Plug 'vim-scripts/github-theme'
 
 call plug#end()
 
-"theme
+"----------------------
+"theme 主题
+"----------------------
 "Credit joshdick
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
@@ -458,12 +482,15 @@ if(has('gui_running'))
 	"set guifont=SimHei:h10
 	"22line mode
 elseif(has('nvim'))
-	"set guifont=黑体:h17
-	set guifont=SimHei:h17
+	set guifont=黑体:h17
+	"set guifont=SimHei:h17
 	"1080p mode, will return WARNING but aable to use
 	"some language in windows need 黑体 instand of SimHei
 endif
 
+"----------------------
+"Plugin-setting 插件配置
+"----------------------
 "Tagbar
 nmap <F7> :TagbarToggle<CR>
 
@@ -555,3 +582,4 @@ nmap sn <Plug>(ale_next_wrap)
 nmap <Leader>s :ALEToggle<CR>
 "<Leader>d查看错误或警告的详细信息
 nmap <Leader>d :ALEDetail<CR>
+
