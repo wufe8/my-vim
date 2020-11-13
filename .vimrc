@@ -108,7 +108,8 @@ map + <C-a>
 map - <C-x>
 "添加数字自增减
 noremap <C-,> ;
-"[fFtT] can search faster: [,] go backword and [ctrl+,] go forword  
+noremap <M-,> ,
+"[fFtT] can search faster: [ctrl+,] go backword and [alt+,] go forword  
 "更方便行内查找 并且避开因进入命令行模式按键修改的不兼容  
 noremap r R
 "[r] will entery Replace mdoe[R]  
@@ -133,9 +134,12 @@ noremap <C-j> 5j
 noremap <C-k> 5k
 noremap <C-l> 5l
 "[ctal+hjkl] to move faster 快速方向移动  
+map <M-Down> <C-w>p5j<C-w>p
+map <M-Up> <C-w>p5k<C-w>p
+"[alt][Up/Down] 将进行另一分屏的移动 更适用快速浏览说明文档  
 noremap <M-j> gj
 noremap <M-k> gk
-"[j/k] 将进行屏幕渲染行移动 更适用与实际编辑时的自动换行  
+"[alt][j/k] 将进行屏幕渲染行移动 更适用与实际编辑时的自动换行  
 "同时上项的noremap <C->将不受影响 仍然为实际行跳转  
 map S <nop>
 "[S*] Split&Tabs 分屏与标签页相关  
@@ -152,14 +156,16 @@ noremap <C-right> :vertical resize +3<CR>
 "[ctrl+arrow key] to zoom split size 调整分屏窗口尺寸  
 "windows下 ctrl+上下可能无效
 map ST :tabedit 
+map SC :set splitbelow<CR>:split<CR>:terminal<CR>
 "[ST] to new tab 新建标签页  
+"[SC] create terminal split at the bottom 在底部创建内置终端  
 if(has('nvim') && has('win32'))
 	noremap <C--> :noh<CR>
 else
 	noremap <C-_> :noh<CR>
 endif
 "[ctrl+'-'(minus)] to hidden search result highlight 关闭搜索高亮显示  
-"[ctrl+'/'] in linux
+"[ctrl+'/'] in linux  
 "noremap <F5> :call CompileRunProg()<CR>  
 "func CompileRunRrog()
 "	exec "w"
@@ -184,14 +190,15 @@ inoremap \h6 ######
 inoremap \v ``<Left>
 inoremap \b ``````<Left><Left><Left><CR><CR><Up>
 inoremap \l <CR>----------------------<CR>
+inoremap \q - [<++>](#<++>)
 "markdown  
 
-imap \i if (<++>)<CR>{<CR><++>
-imap \s switch (<++>)<CR>{<CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \w while (<++>)<CR>{<CR><++><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \f for (<++>; <++>;<++>)<CR>{<CR><++><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \c class <++><CR>{<CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{<CR><++><CR>return 0;<C-o>?<++><CR><C-o>:noh<CR><Tab>
+imap \i if (<++>)<CR>{<CR><++><CR>}
+imap \s switch (<++>)<CR>{<CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><CR>}<C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>a
+imap \w while (<++>)<CR>{<CR><++><CR>}<C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>a
+imap \f for (<++>; <++>;<++>)<CR>{<CR><++><CR>}<C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>a
+imap \c class <++><CR>{<CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<CR><BS>};<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{<CR><++><CR>return 0;<CR><BS>}<C-o>?<++><CR><C-o>:noh<CR><Tab>
 imap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
 "c, c++
 
@@ -315,14 +322,35 @@ endfunction
 inoremap ,d <ESC>:call RemovePairs()<CR>a
 "inoremap <BS> <ESC>:call RemoveEmptyPairs()<CR>a
 "括号删除 https://juejin.im/entry/6844903473050304526
+
+function! BoolSwitch() "TODO 当光标在True/False前时仍然会执行操作 但删除位置错误
+	let l:getWord = expand("<cword>")
+	if l:getWord == "True"
+		execute "normal! ciwFalse"
+	elseif l:getWord == "true"
+		execute "normal! ciwfalse"
+	elseif l:getWord == "False"
+		execute "normal! ciwTrue"
+	elseif l:getWord == "false"
+		execute "normal! ciwtrue"
+	end
+endfunction
+noremap ,s :call BoolSwitch()<CR>
+inoremap ,s <ESC>:call BoolSwitch()<CR>a
+"Switch between True and False
+
 inoremap \= <CR><ESC>ddkPI
 inoremap \- <ESC>ddpXi
 "向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
-inoremap ,a <++>
-inoremap ,f <C-o>/<++><CR><C-o>:noh<CR>
-inoremap ,F <C-o>?<++><CR><C-o>:noh<CR>
-inoremap ,c <C-o>/<++><CR><C-o>:noh<CR><C-o>da<
-inoremap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o>da<
+map ,f /<++><CR>:noh<CR>
+map ,F ?<++><CR>:noh<CR>
+map ,c /<++><CR>:noh<CR>xxxxi
+map ,C ?<++><CR>:noh<CR>xxxxi
+imap ,a <++>
+imap ,f <C-o>/<++><CR><C-o>:noh<CR>
+imap ,F <C-o>?<++><CR><C-o>:noh<CR>
+imap ,c <C-o>/<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
+imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 "打锚点<++>; `,a`添加; `,f`向下搜索; `,F`向上搜索;
 "`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
 
@@ -356,7 +384,10 @@ Plug 'dense-analysis/ale'
 "代码错误检查
 Plug 'jiangmiao/auto-pairs'
 "自动括号补全 相较自行编写效率更高
-
+Plug 'mbbill/undotree'
+"编辑历史记录
+Plug 'tpope/vim-surround'
+"快速更改包裹符号
 
 "主题 亮暗模式可通过 `set background=[light/dart]` 实现
 Plug 'connorholyday/vim-snazzy'
@@ -436,9 +467,11 @@ endif
 "Tagbar
 nmap <F7> :TagbarToggle<CR>
 
+"undotree
+nmap <F8> :UndotreeToggle<CR>
+
 "NERDTree
 "open NERDTree split when vim opeded
-map <F8> :NERDTree
 map <F9> :NERDTreeToggle<CR>
 
 let NERDTreeShowHidden=1
