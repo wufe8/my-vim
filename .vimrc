@@ -364,12 +364,12 @@ imap \- <ESC>ddpXi
 "向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
 map ,f /<++><CR>:noh<CR>
 map ,F ?<++><CR>:noh<CR>
-map ,c /<++><CR>:noh<CR>xxxxi
+map ,c h/<++><CR>:noh<CR>xxxxi
 map ,C ?<++><CR>:noh<CR>xxxxi
 imap ,a <++>
 imap ,f <C-o>/<++><CR><C-o>:noh<CR>
 imap ,F <C-o>?<++><CR><C-o>:noh<CR>
-imap ,c <C-o>/<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
+imap ,c <C-o>b<C-o>/<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 "打锚点<++>; `,a`添加; `,n`向下搜索; `,N`向上搜索;
 "`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
