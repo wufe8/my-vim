@@ -52,8 +52,8 @@ echo [DEBUG] vaildParamater $vaildParamater
 
 if [ "$vaildParamater" == "y" ]
 then
-	willBackupVim=y
-	willBackupNeoVim=y
+	willBackupVim=n
+	willBackupNeoVim=n
 	#有vim配置文件时询问是否覆盖(会进行备份)
 	if [ "$willChangeVim" == "y" ]
 	then
@@ -64,8 +64,8 @@ then
 			#已经有备份 将进行警告
 			if [ -e $vimrcPath/.vimrc.BACKUP ]
 			then
-				echo "find $vimrcPath/.vimrc.BACKUP, are you sure to replace BACKUP?(y/n)"
-				read willBackupVim
+				echo "[WRONG] find $vimrcPath/.vimrc.BACKUP, please move the backup to other path, or it may be replace."
+				willBackupVim=y
 			fi
 		fi
 	fi
@@ -84,17 +84,17 @@ then
 			#已经有备份 将进行警告
 			if [ -e $neovimrcPath/init.vim.BACKUP ]
 			then
-				echo "find $neovimrcPath/init.vim.BACKUP, are you sure to continue?(y/n)"
-				read willBackupNeoVim
+				echo "[WRONG] find $neovimrcPath/init.vim.BACKUP, please move the backup to other path, or it may be replace."
+				willBackupNeoVim=y
 			fi
 		fi
 	fi
 	echo
 	echo [DEBUG] willChangeVim $willChangeVim
 	echo [DEBUG] willChangeNeoVim $willChangeNeoVim
-	echo [DEBUG] willBackupVim $willBackupVim
-	echo [DEBUG] willBackupNeoVim $willBackupNeoVim
 	echo
+    echo "press enter to continue"
+	read
 	#有插件配置模式
 	if [ "$2" == "plugin" ]
 	then
@@ -165,7 +165,8 @@ then
 			echo [DEBUG] installDepend $installDepend
 			if [ "$installDepend" == "y" ]
 			then
-				sudo apt-get install python3 nodejs ctags gcc g++ git cmake
+				sudo apt-get install python3 nodejs npm ctags gcc g++ git cmake vim xclip
+				sudo pacman -S base-devel python nodejs npm ctags gcc git cmake vim xclip
 			else
 				echo [INFO] some plugin will need them, make sure you will install them later if you need these plugin
 			fi
@@ -178,7 +179,7 @@ then
 				if [ "$nvimSupport" == "y" ]
 				then
 					pip install pynvim
-					npm install neovim
+					sudo npm install -g neovim
 				else
 					echo [INFO] some plugin will need them, make sure you will install them later if you need these plugin.
 				fi
@@ -199,9 +200,11 @@ then
 			echo [DEBUG] compilePlugin $compilePlugin
 			if [ "$compilePlugin" == "y" ]
 			then
-				python3 $vimrcPath/.vim/plugged/YouCompleteme/install.py --all
+				cd $vimrcPath/.vim/plugged/YouCompleteMe
+				python3 ./install.py --all
 				echo=
-				npm install $vimrcPath/.vim/plugged/markdown-preview.nvim
+				cd $vimrcPath/.vim/plugged/markdown-preview.nvim
+				npm install
 			else
 				echo [INFO] you can compile them by yourself later
 			fi

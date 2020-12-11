@@ -207,12 +207,12 @@ inoremap \l <CR>----------------------<CR>
 inoremap \q - [<++>](#<++>)
 "markdown  
 
-imap \i if (<++>)<CR>{<CR><++><CR>}
-imap \s switch (<++>)<CR>{<CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><CR>}<C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>a
-imap \w while (<++>)<CR>{<CR><++><CR>}<C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>a
-imap \f for (<++>; <++>;<++>)<CR>{<CR><++><CR>}<C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>a
-imap \c class <++><CR>{<CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<CR><BS>};<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{<CR><++><CR>return 0;<CR><BS>}<C-o>?<++><CR><C-o>:noh<CR><Tab>
+imap \i if (<++>)<CR>{}<Left><CR><++><Down>
+imap \s switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \w while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \f for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \c class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
 imap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
 "c, c++
 
@@ -345,14 +345,14 @@ inoremap ,d <ESC>:call RemovePairs()<CR>a
 
 function! BoolSwitch() "TODO 当光标在True/False前时仍然会执行操作 但删除位置错误
 	let l:getWord = expand("<cword>")
-	if l:getWord == "True"
-		execute "normal! ciwFalse"
-	elseif l:getWord == "true"
+	if l:getWord == "true"
 		execute "normal! ciwfalse"
-	elseif l:getWord == "False"
-		execute "normal! ciwTrue"
 	elseif l:getWord == "false"
 		execute "normal! ciwtrue"
+	elseif l:getWord == "True"
+		execute "normal! ciwFalse"
+	elseif l:getWord == "False"
+		execute "normal! ciwTrue"
 	end
 endfunction
 noremap ,s :call BoolSwitch()<CR>

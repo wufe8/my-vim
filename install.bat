@@ -45,15 +45,16 @@ if "%vaildParamater%" == "y" (
 echo [DEBUG] vaildParamater %vaildParamater%
 
 if "%vaildParamater%" == "y" (
-	set willBackupVim=y
-	set willBackupNeoVim=y
+	set willBackupVim=n
+	set willBackupNeoVim=n
 	REM 有vim配置文件时询问是否覆盖(会进行备份)
 	if "%willChangeVim%" == "y" (
 		if exist %vimrcPath%\.vimrc (
 			set /p willChangeVim="Vim: find'.vimrc' already exist, want to replace?(origin ,vim will be backup)(y/n)"
 			REM 已经有备份 将进行警告
 			if exist %vimrcPath%\.vimrc.BACKUP (
-			set /p willBackupVim="find %vimrcPath%\.vimrc.BACKUP, are you sure to replace BACKUP?(y/n)"
+				echo "[WRONG] find %vimrcPath%/.vimrc.BACKUP, please move the backup to other path, or it may be replace."
+                set willBackupVim=y
 			)
 		)
 	)
@@ -67,16 +68,17 @@ if "%vaildParamater%" == "y" (
 			set /p willChangeNeoVim="NeoVim: find'init.vim' already exist, want to replace?(origin ,vim will be backup)(y/n)"
 			REM 已经有备份 将进行警告
 			if exist %neovimrcPath%\init.vim.BACKUP (
-			set /p willBackupNeoVim="find %neovimrcPath%\init.vim.BACKUP, are you sure to replace BACKUP?(y/n)"
+				echo "[WRONG] find %neovimrcPath%/init.vim.BACKUP, please move the backup to other path, or it may be replace."
+            	set willBackupNeoVim=y
 			)
 		)
 	)
 	echo=
 	echo [DEBUG] willChangeVim %willChangeVim%
 	echo [DEBUG] willChangeNeoVim %willChangeNeoVim%
-	echo [DEBUG] willBackupVim %willBackupVim%
-	echo [DEBUG] willBackupNeoVim %willBackupNeoVim%
 	echo=
+	echo press any key to continue
+    pause>nul
 	REM 有插件配置模式 
 	if "%2" == "plugin" (
 		REM 判断是否需要变动vim文件 $1应为all或vim
@@ -136,7 +138,7 @@ if "%vaildParamater%" == "y" (
 				echo [DEBUG] nvimSupport %nvimSupport%
 				if "%nvimSupport%" == "y" (
 					pip install pynvim
-					npm install neovim
+					sudo npm install -g neovim
 				) else (
 					echo [INFO] some plugin will need them, make sure you will install them later if you need these plugin.
 				)
@@ -153,9 +155,11 @@ if "%vaildParamater%" == "y" (
 			set /p compilePlugin="would you like to compile YCM and markdown-preview now? It need python, nodejs, gcc(or visual studio), cmake(y/n)"
 			echo [DEBUG] compilePlugin %compilePlugin%
 			if "%compilePlugin%" == "y" (
-				python %vimrcPath%\.vim\plugged\YouCompleteme\install.py --all
+				cd %vimrcPath%\.vim\plugged\YouCompleteme\
+				python ./install.py --all
 				echo=
-				npm install $vimrcPath\.vim\plugged\markdown-preview.nvim
+				cd %vimrcPath%\.vim\plugged\markdown-preview.nvim\
+				npm install
 			)else (
 				echo [INFO] you can compile them by yourself later
 			)

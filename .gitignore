@@ -16,3 +16,5 @@ package-lock.json
 
 !.vim/autoload/plug.vim
 !.config/nvim/autoload/plug.vim
+
+effect.txt
