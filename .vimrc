@@ -122,7 +122,7 @@ map + <C-a>
 map - <C-x>
 "添加数字自增减
 noremap <C-,> ;
-noremap <M-,> ,
+noremap <C-.> ,
 "[fFtT] can search faster: [ctrl+,] go backword and [alt+,] go forword  
 "更方便行内查找 并且避开进入命令行模式以及锚点相关按键修改的不兼容  
 noremap r R
