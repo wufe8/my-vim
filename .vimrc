@@ -128,6 +128,7 @@ noremap <C-.> ,
 noremap r R
 "[r] will entery Replace mdoe[R]  
 "因为[R]用于文件处理了 更改[r]为原[R]进入替换模式 比单字符替换更适用  
+
 map R <nop>
 "[R*] File&Profile 文件与配置相关  
 map RH <C-w>v:e $VIMDOC<CR><C-w>15+
@@ -143,6 +144,9 @@ endif
 "will use different vimrc(init.vim) if neovim  
 "need to define $MYVIMRC, $MYNEOVIMRC  
 "开启与重载vim配置文件 需要定义变量  
+map RI :tabedit $MYI3CFG<CR>
+"打开i3wm配置文件
+
 noremap <C-h> 5h
 noremap <C-j> 5j
 noremap <C-k> 5k

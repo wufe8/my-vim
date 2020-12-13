@@ -1,13 +1,15 @@
 "this is a .vimrc for vanilla  
 "by wufe8  
 
-"Autocmd
-if has("nvim")
-	autocmd vimenter * set splitbelow
-	autocmd vimenter * split
-endif
-autocmd vimenter * term
-autocmd vimenter * resize 7
+"----------------------
+"autocmd 启动执行
+"----------------------
+"if has("nvim")
+	"autocmd vimenter * set splitbelow
+	"autocmd vimenter * split
+"endif
+"autocmd vimenter * term
+"autocmd vimenter * resize 7
 "开启内置终端
 "if(has('nvim') && has('win32'))
 	"autocmd vimenter * tabedit $MYNEOVIMRC
@@ -26,7 +28,9 @@ autocmd vimenter * resize 7
 "autocmd vimenter * NERDTree
 "开启tagbar以及NERDTree
 
-"BugFix  
+"----------------------
+"BugFix 错误修复  
+"----------------------
 set nocompatible
 "set term=screen-256color  
 filetype on
@@ -36,7 +40,9 @@ let &t_ut=''
 set backspace=indent,eol,start
 "now \<BR> can be using at start  
 
+"----------------------
 "View 显示  
+"----------------------
 syntax on
 "color mode 显示行数  
 set number
@@ -70,7 +76,9 @@ set splitbelow
 set splitright
 "`vsplit` will open in the right of origin window(default is `nosplitright`)) 创建默认垂直分屏窗口将创建在相对原窗口的右方 而非左方  
  
+"----------------------
 "Edit 编辑  
+"----------------------
 set ignorecase
 "searching will ignore case 搜索时忽略大小写  
 set smartcase
@@ -78,12 +86,16 @@ set smartcase
 set clipboard+=unnamed
 "if \"+=unnamed" vim clipboard will share with system clipboard  
  
-"Move  
+"----------------------
+"Move 移动  
+"----------------------
 set scrolloff=8
 set whichwrap=b,s,h,l,<,>,[,]
 set mouse=nv
  
-"Language  
+"----------------------
+"Language 语言  
+"----------------------
 set fileencodings=utf-8,ucs-bom,shift-jis,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set encoding=utf-8
 "set termencoding=utf-8  
@@ -94,25 +106,29 @@ set fencs=utf-8,ucs-bom,shift-jis,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set ambiwidth=double
 "fix some word only graph half  
 
-"Keymap  
+"----------------------
+"Keymap 映射  
+"----------------------
 "let mapleader="<space>"  
 "map <space><space> <leader><leader>  
  
 map s <nop>
 map ss :w<CR>
 "[ss] to save file 保存  
-"锁定屏幕 <C-q>解除
+"锁定屏幕 <C-q>解除  
 noremap ; :
 "make enter command easiler([;]) 更方便进入命令行模式  
 map + <C-a>
 map - <C-x>
 "添加数字自增减
 noremap <C-,> ;
-"[fFtT] can search faster: [,] go backword and [ctrl+,] go forword  
-"更方便行内查找 并且避开因进入命令行模式按键修改的不兼容  
+noremap <C-.> ,
+"[fFtT] can search faster: [ctrl+,] go backword and [alt+,] go forword  
+"更方便行内查找 并且避开进入命令行模式以及锚点相关按键修改的不兼容  
 noremap r R
 "[r] will entery Replace mdoe[R]  
-"因为[R]用于文件处理了 更改[r]为原[R]进入替换模式 比单字符替换更适用   
+"因为[R]用于文件处理了 更改[r]为原[R]进入替换模式 比单字符替换更适用  
+
 map R <nop>
 "[R*] File&Profile 文件与配置相关  
 map RH <C-w>v:e $VIMDOC<CR><C-w>15+
@@ -128,14 +144,20 @@ endif
 "will use different vimrc(init.vim) if neovim  
 "need to define $MYVIMRC, $MYNEOVIMRC  
 "开启与重载vim配置文件 需要定义变量  
+map RI :tabedit $MYI3CFG<CR>
+"打开i3wm配置文件
+
 noremap <C-h> 5h
 noremap <C-j> 5j
 noremap <C-k> 5k
 noremap <C-l> 5l
 "[ctal+hjkl] to move faster 快速方向移动  
-noremap <M-j> gj
-noremap <M-k> gk
-"[j/k] 将进行屏幕渲染行移动 更适用与实际编辑时的自动换行  
+map <M-Down> <C-w>p5j<C-w>p
+map <M-Up> <C-w>p5k<C-w>p
+"[alt][Up/Down] 将进行另一分屏的移动 更适用快速浏览说明文档
+map <M-j> gj
+map <M-k> gk
+"[alt][j/k] 将进行屏幕渲染行移动 更适用与实际编辑时的自动换行  
 "同时上项的noremap <C->将不受影响 仍然为实际行跳转  
 map S <nop>
 "[S*] Split&Tabs 分屏与标签页相关  
@@ -152,7 +174,9 @@ noremap <C-right> :vertical resize +3<CR>
 "[ctrl+arrow key] to zoom split size 调整分屏窗口尺寸  
 "windows下 ctrl+上下可能无效
 map ST :tabedit 
+map SC :set splitbelow<CR>:split<CR>:terminal<CR>
 "[ST] to new tab 新建标签页  
+"[SC] create terminal split at the bottom 在底部创建内置终端  
 if(has('nvim') && has('win32'))
 	noremap <C--> :noh<CR>
 else
@@ -184,14 +208,15 @@ inoremap \h6 ######
 inoremap \v ``<Left>
 inoremap \b ``````<Left><Left><Left><CR><CR><Up>
 inoremap \l <CR>----------------------<CR>
+inoremap \q - [<++>](#<++>)
 "markdown  
 
-imap \i if (<++>)<CR>{<CR><++>
-imap \s switch (<++>)<CR>{<CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \w while (<++>)<CR>{<CR><++><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \f for (<++>; <++>;<++>)<CR>{<CR><++><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \c class <++><CR>{<CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{<CR><++><CR>return 0;<C-o>?<++><CR><C-o>:noh<CR><Tab>
+imap \i if (<++>)<CR>{}<Left><CR><++><Down>
+imap \s switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \w while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \f for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \c class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
 imap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
 "c, c++
 
@@ -211,11 +236,16 @@ inoremap <C-h> <Left><Left><Left><Left><Left>
 inoremap <C-j> <Down><Down><Down><Down><Down>
 inoremap <C-k> <Up><Up><Up><Up><Up>
 inoremap <C-l> <Right><Right><Right><Right><Right>
+imap <M-Down> <C-o><C-w>p<C-o>5j<C-o><C-w>p
+imap <M-Up> <C-o><C-w>p<C-o>5k<C-o><C-w>p
+"[alt][Up/Down] 将进行另一分屏的移动 更适用快速浏览说明文档
 "[ctal+direction] can be use in insert mode  
 "插入模式下可通过[ctrl+方向键]实现更快速的移动  
 "<M-hjkl> may not be run in linux+vim, but can be map in neovim
 
+"----------------------
 "括号的自动补全 效率与智能较低
+"----------------------
 function! InsertPairs(charOpen, charClose)
 	let l:line = getline(".")
 	let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
@@ -313,20 +343,43 @@ function! RemovePairs()
 endfunction
 " 用退格键删除一个左括号时同时删除对应的右括号
 inoremap ,d <ESC>:call RemovePairs()<CR>a
-inoremap <BS> <ESC>:call RemoveEmptyPairs()<CR>a
+"inoremap <BS> <ESC>:call RemoveEmptyPairs()<CR>a
 "括号删除 https://juejin.im/entry/6844903473050304526
-inoremap \= <CR><ESC>ddkPI
-inoremap \- <ESC>ddpXi
+
+function! BoolSwitch() "TODO 当光标在True/False前时仍然会执行操作 但删除位置错误
+	let l:getWord = expand("<cword>")
+	if l:getWord == "true"
+		execute "normal! ciwfalse"
+	elseif l:getWord == "false"
+		execute "normal! ciwtrue"
+	elseif l:getWord == "True"
+		execute "normal! ciwFalse"
+	elseif l:getWord == "False"
+		execute "normal! ciwTrue"
+	end
+endfunction
+noremap ,s :call BoolSwitch()<CR>
+inoremap ,s <ESC>:call BoolSwitch()<CR>a
+"Switch between True and False
+
+imap \= <CR><ESC>ddkPI
+imap \- <ESC>ddpXi
 "向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
-inoremap ,a <++>
-inoremap ,f <C-o>/<++><CR><C-o>:noh<CR>
-inoremap ,F <C-o>?<++><CR><C-o>:noh<CR>
-inoremap ,c <C-o>/<++><CR><C-o>:noh<CR><C-o>da<
-inoremap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o>da<
+map ,f /<++><CR>:noh<CR>
+map ,F ?<++><CR>:noh<CR>
+map ,c h/<++><CR>:noh<CR>xxxxi
+map ,C ?<++><CR>:noh<CR>xxxxi
+imap ,a <++>
+imap ,f <C-o>/<++><CR><C-o>:noh<CR>
+imap ,F <C-o>?<++><CR><C-o>:noh<CR>
+imap ,c <C-o>b<C-o>/<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
+imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 "打锚点<++>; `,a`添加; `,f`向下搜索; `,F`向上搜索;
 "`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
 
-"theme
+"----------------------
+"theme 主题
+"----------------------
 "Credit joshdick
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
