@@ -178,6 +178,7 @@ then
 				echo [DEBUG] nvimSupport $nvimSupport
 				if [ "$nvimSupport" == "y" ]
 				then
+                    python3 -m pip install pynvim
 					pip install pynvim
 					sudo npm install -g neovim
 				else
