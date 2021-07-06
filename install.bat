@@ -1,5 +1,4 @@
 echo off
-cls
 
 REM 格式: install $1 $2
 REM -------------------
