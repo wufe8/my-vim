@@ -1,5 +1,4 @@
 echo off
-cls
 
 REM 格式: install $1 $2
 REM -------------------
@@ -114,7 +113,7 @@ if "%vaildParamater%" == "y" (
 				mkdir %neovimrcPath%\autoload
 			)
 			if NOT exist %neovimrcPath%\autoload\plug.vim (
-				copy .\.vimrc %neovimrcPath%\autoload\plug.vim
+				copy .\.vim\autoload\plug.vim %neovimrcPath%\autoload\plug.vim
 			)
 			REM 备份neovim配置文件
 			if "%willBackupNeoVim%" == "y" (
