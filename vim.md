@@ -752,7 +752,20 @@ set ambiwidth=double
 可以通过函数名来执行一系列操作  
 > 声明 `func <string>(<paramater>...)...endfunc`
 
+#### 变量
+`let <name> = <value>` 声明变量
+若名字为g:\<name>形式 表示为全局变量
+纯数字的字符串可当作数字使用 参与运算
+\<value>外用引号("..."或'...')包裹为字符串
+其中双引号内容可转义 单引号内容不可转义 直接输出
+
+`let <name> = [<value0>, <value1>, <value2>...]` 声明列表
+使用如`:echo foo[0]` 注意列表从0开始 而非1开始
+
 #### 内置函数
+> 鉴于vim是编辑器 经常使用字符串操作 故建议字符串参数尽可能添加引号
+很明显 绝大多数内置函数与字符串操作有关
+
 `has('<string>')` 返回\<bool>  
 判断是否声明常数\<string>  
 常用常数:  
@@ -766,9 +779,23 @@ set ambiwidth=double
 | unix        | unix系的系统 |
 | mac         | macos        |
 
-
-`line('<enum>')` 返回\<number>  
+`line(<enum>)` 返回\<number>  
 根据输入返回行数 `.`当前行  
+
+`len(<enum>)` 返回\<number>
+返回字符串或列表长度
+
+`add(<list>, <value>)`
+将\<value>插入到\<list>的尾部
+
+`index(<list>, <value>)` 返回\<number>
+在\<list>中查找\<value> 返回所在索引 若未找到则返回-1
+
+`join(<list>, <value>)` \<value>可选 返回\<string>
+遍历\<list> 将每个元素作为字符串合并起来 并使用\<value>进行各元素间间隔 返回合并的字符串
+
+`reverse(<list>)` 返回\<list>
+把列表的各元素从尾到头反过来并返回
 
 ----------------------
 
@@ -1120,16 +1147,21 @@ eitherThanOsu = 820
 - [github仓库](https://github.com/tpope/vim-surround)  
 
 这个插件可以快速对包裹符(如括号)进行更改 或者说对原版vim的附加操作的增强 特别对html xml类的标签有特别的支持  
-如[附加操作 Motion](#附加操作-Motion)所表 `[a/i/t]+<symbel>`可对包裹符进行不同的圈定 该插件操作类似 但注意并不是\<motion> 而是在\<motion>之前  
+类似[附加操作 Motion](#附加操作-Motion)所表 `[a/i/t]+<symbel>`可对包裹符进行不同的圈定 该插件操作类似
 
-- 格式为`<operation>s<motion>`  
+- 格式为`<operation>s<motion>` 有以下操作:  
+	1. `ds<enum0>` 删除包裹符
+	2. `cs<enum0>` 替换包裹符
+	3. `ys<enum0>` 添加包裹符
 
 本插件对需要\<motion>圈定范围的操作添加了`s` surround:
 - `s<enum0>` 将操作范围作用在头尾上的\<enum0>  
 - `s<enum0><enum1>` 将操作范围作用在 *\<enum0>所包含的字符串* 头尾上的\<enum0> 并输出目标\<enum1>(此为操作`c/y`限定 作用为替换包裹符)  
 
+在可视模式下 使用`S<symble>` 可快速在选定范围外添加符号
+
 > \<enum0>可以为:  
-> `w` 单词; `s` 句子(以`. ! ? :`等进行识别); `p` 段落(以`\n`(空行)进行识别) `t` 任意类html标签 如`<q>`  
+> `w` `W` 单词; `s` `S` 句子(以`. ! ? :`等进行识别); `p` 段落(以`\n`(空行)进行识别) `t` 任意类html标签 如`<q>`  
 > `<symble>`包裹符(括号 引号之类的成对符号)  
 
 > \<enum1>可以为:  
@@ -1143,18 +1175,25 @@ eitherThanOsu = 820
 `'Hello world!'`  
 
 案例中输入`cs"<h1>`:  
-`\<h1>Hello world!\</h1>`  
+`<h1>Hello world</h1>`  
 
 案例中输入`ds"`:  
 `Hello world!`  
 
-案例中输入`ysiw[`(似乎重载为了`g@iw[`):  
-`"Hello world!"`  
+案例中(光标在"H"上)输入`ysiw[`(似乎重载为了`g@iw[`):  
+`"[ Hello ] world!"`  
 
-案例中输入`yss(`:  
-`( "Hello world!" )`  
+案例中输入`yss{`:  
+`{ "Hello world!" }`  
+
+案例中输入`yss}`:  
+`{"Hello world!"}`
+
+> 左右不相同的区间符号(如括号) 替换中使用左方会带空格 而使用右方则不带空格
 
 ## 记录 Changelog
+RC1.34 2021/04/13-01/51
+更改了vim-surround的描述
 RC1.33 2021/01/28-22/09
 修改了模式切换图 更容易阅读了
 因为格式化不方便 添加正则表达式

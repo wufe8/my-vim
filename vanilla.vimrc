@@ -1,10 +1,9 @@
-"this is a .vimrc for vanilla  
-"by wufe8  
+"This .vimrc(or init.vim) is for dairy use by wufe8  
 
 "----------------------
 "autocmd 启动执行
 "----------------------
-"if has("nvim")
+"if has("nvim");
 	"autocmd vimenter * set splitbelow
 	"autocmd vimenter * split
 "endif
@@ -209,15 +208,17 @@ inoremap \v ``<Left>
 inoremap \b ``````<Left><Left><Left><CR><CR><Up>
 inoremap \l <CR>----------------------<CR>
 inoremap \q - [<++>](#<++>)
+inoremap \f \frac{<++>}{<++>}<C-o>10h
+inoremap \o \overline{<++>}<C-o>4h
 "markdown  
 
-imap \i if (<++>)<CR>{}<Left><CR><++><Down>
-imap \s switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \w while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \f for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \c class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
-imap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
+imap \ci if (<++>)<CR>{}<Left><CR><++><Down>
+imap \cs switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \cw while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
+imap \cp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
+imap \ch #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
 "c, c++
 
 inoremap <C-z> <C-o>u
@@ -246,62 +247,63 @@ imap <M-Up> <C-o><C-w>p<C-o>5k<C-o><C-w>p
 "----------------------
 "括号的自动补全 效率与智能较低
 "----------------------
-function! InsertPairs(charOpen, charClose)
-	let l:line = getline(".")
-	let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
-	if a:charClose != l:next_char
-		execute "normal! a" . a:charOpen . a:charClose . ""
-	end
-endfunction
-inoremap ( <ESC>:call InsertPairs('(', ')')<CR>i
-inoremap [ <ESC>:call InsertPairs('[', ']')<CR>i
-inoremap { <ESC>:call InsertPairs('{', '}')<CR>i
-" 括号补全 特别地 如果下一个字符是右括号 不会进行补全 避免出现重复字符
-function! RemoveNextDoubleChar(char)
-	let l:line = getline(".")
-	let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
-	if a:char == l:next_char
-		execute "normal! l"
-	else
-		execute "normal! a" . a:char . ""
-	end
-endfunction
-inoremap ) <ESC>:call RemoveNextDoubleChar(')')<CR>a
-inoremap ] <ESC>:call RemoveNextDoubleChar(']')<CR>a
-inoremap } <ESC>:call RemoveNextDoubleChar('}')<CR>a
-" 输入一个字符时，如果下一个字符也是括号，则删除它，避免出现重复字符
-
-"括号补全
-function! RemoveEmptyPairs()
-	let l:line = getline(".")
-	let l:previous_char = l:line[col(".")-1] " 取得当前光标前一个字符
-	let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
-	"前后三种括号头尾时 删除整对
-	if previous_char == '(' && next_char == ')'
-		execute "normal! xxa"
-	elseif previous_char == '[' && next_char == ']'
-		execute "normal! xxa"
-	elseif previous_char == '{' && next_char == '}'
-		execute "normal! xxa"
-	"普通退格
-	"在开头时
-	elseif col(".") == 1
-		if len(l:line) == 0 
-		"开头且为空行
-		"TODO 解决删除行首字符时退行的问题
-			execute "normal! Xa"
-		end
-	else
-		"在行尾时
-		if len(l:line) == col(".")
-			execute "normal! xa"
-		else
-		"正常情况
-			execute "normal! xi"
-		end
-	end
-endfunction
+"function! InsertPairs(charOpen, charClose)
+    "let l:line = getline(".")
+    "let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
+    "if a:charClose != l:next_char
+        "execute "normal! a" . a:charOpen . a:charClose . ""
+    "end
+"endfunction
+"inoremap ( <ESC>:call InsertPairs('(', ')')<CR>i
+"inoremap [ <ESC>:call InsertPairs('[', ']')<CR>i
+"inoremap { <ESC>:call InsertPairs('{', '}')<CR>i
+"" 括号补全 特别地 如果下一个字符是右括号 不会进行补全 避免出现重复字符
+"function! RemoveNextDoubleChar(char)
+    "let l:line = getline(".")
+    "let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
+    "if a:char == l:next_char
+        "execute "normal! l"
+	"else
+		"execute "normal! a" . a:char . ""
+    "end
+"endfunction
+"inoremap ) <ESC>:call RemoveNextDoubleChar(')')<CR>a
+"inoremap ] <ESC>:call RemoveNextDoubleChar(']')<CR>a
+"inoremap } <ESC>:call RemoveNextDoubleChar('}')<CR>a
+"" 输入一个字符时，如果下一个字符也是括号，则删除它，避免出现重复字符
+"
+""括号补全
+"function! RemoveEmptyPairs()
+    "let l:line = getline(".")
+    "let l:previous_char = l:line[col(".")-1] " 取得当前光标前一个字符
+    "let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
+	""前后三种括号头尾时 删除整对
+    "if previous_char == '(' && next_char == ')'
+		"execute "normal! xxa"
+	"elseif previous_char == '[' && next_char == ']'
+		"execute "normal! xxa"
+	"elseif previous_char == '{' && next_char == '}'
+		"execute "normal! xxa"
+	""普通退格
+	""在开头时
+	"elseif col(".") == 1
+		"if len(l:line) == 0 
+		""开头且为空行
+		""TODO 解决删除行首字符时退行的问题
+			"execute "normal! Xa"
+		"end
+	"else
+		""在行尾时
+		"if len(l:line) == col(".")
+			"execute "normal! xa"
+		"else
+		""正常情况
+			"execute "normal! xi"
+		"end
+    "end
+"endfunction
 " 按退格键时判断当前光标前一个字符，如果是左括号，则删除对应的右括号以及括号中间的内容
+
 function! RemovePairs()
 	let l:line = getline(".")
 	let l:previous_char = l:line[col(".")-1] " 取得当前光标前一个字符
@@ -374,8 +376,67 @@ imap ,f <C-o>/<++><CR><C-o>:noh<CR>
 imap ,F <C-o>?<++><CR><C-o>:noh<CR>
 imap ,c <C-o>b<C-o>/<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
-"打锚点<++>; `,a`添加; `,f`向下搜索; `,F`向上搜索;
+"打锚点<++>; `,a`添加; `,n`向下搜索; `,N`向上搜索;
 "`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
+
+"----------------------
+"Plugin 插件
+"----------------------
+"call plug#begin('~/.vim/plugged')
+"Plug 'vim-airline/vim-airline'
+""rular栏美化
+"Plug 'ycm-core/YouCompleteMe'
+""代码补全 需要python 在终端中进入插件目录输入 `python install.py --all` 即可编译所有可用语言的代码补全
+"Plug 'preservim/nerdtree'
+""可视化文件管理菜单 支持书签
+"Plug 'Xuyuanp/nerdtree-git-plugin'
+""使NERDTree通过图标提示文件的变动
+"Plug 'jistr/vim-nerdtree-tabs'
+""使不同标签页下的NERDTree同步
+"Plug 'majutsushi/tagbar'
+""可视化文件代码结构 支持快速跳转 需要python
+"Plug 'godlygeek/tabular'
+""提供快速对齐代码块的方法
+"Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+""提供开启浏览器实时预览markdown的方法
+""Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+""go语言支持
+"Plug 'frazrepo/vim-rainbow'
+""用不同颜色进行括号分级 使代码更易读
+"Plug 'preservim/nerdcommenter'
+""快速注释代码
+"Plug 'airblade/vim-gitgutter'
+""在行数左边显示git仓库的变动
+"Plug 'dense-analysis/ale'
+""代码错误检查
+"Plug 'jiangmiao/auto-pairs'
+""自动括号补全 相较自行编写效率更高
+"Plug 'mbbill/undotree'
+""编辑历史记录
+"Plug 'tpope/vim-surround'
+""快速更改包裹符号
+"Plug 'gcmt/wildfire.vim'
+""回车键快速选取括号包裹内容
+
+""主题 亮暗模式可通过 `set background=[light/dart]` 实现
+"Plug 'connorholyday/vim-snazzy'
+""冷色调 偏蓝 紫
+"Plug 'morhetz/gruvbox'
+""主灰棕 高亮绿红橙
+"Plug 'Marfisc/vorange'
+""类似gruvbox 但高亮色略有不同
+"Plug 'altercation/vim-colors-solarized'
+""亮暗双模式 暗色模式蓝背景 主蓝色 不支持真彩色
+"Plug 'lifepillar/vim-solarized8'
+""上主题的fork 支持真彩色
+"Plug 'soft-aesthetic/soft-era-vim'
+""低对比 白 紫
+"Plug 'rakr/vim-one'
+""亮暗双模式 偏原始风
+"Plug 'vim-scripts/github-theme'
+""github风
+
+"call plug#end()
 
 "----------------------
 "theme 主题
@@ -404,14 +465,128 @@ endif
 
 colorscheme desert
 
+"colorscheme snazzy
+"let g:SnazzyTransparent=1
+
+"colorscheme gruvbox
+"let g:airline_theme="gruvbox"
+
+"colorscheme solarized
+"colorscheme solarized8
+"let g:solarized_termtrans=1
+
+"colorscheme vorange
+"let g:airline_theme="vorange"
+
+"colorscheme soft-era
+
+"colorscheme one
+"let g:airline_theme="one"
+
 if(has('gui_running'))
 	set guifont=SimHei:h17
 	"1080p mode
 	"set guifont=SimHei:h10
 	"22line mode
 elseif(has('nvim'))
-	"set guifont=黑体:h17
-	set guifont=SimHei:h17
+	set guifont=黑体:h17
+	"set guifont=SimHei:h17
 	"1080p mode, will return WARNING but aable to use
 	"some language in windows need 黑体 instand of SimHei
 endif
+
+"----------------------
+"Plugin-setting 插件配置
+"----------------------
+"Tagbar
+"nmap <F7> :TagbarToggle<CR>
+
+""undotree
+"nmap <F8> :UndotreeToggle<CR>
+
+""NERDTree
+""open NERDTree split when vim opeded
+"map <F9> :NERDTreeToggle<CR>
+
+"let NERDTreeShowHidden=1
+""will show hidden file 显示隐藏文件
+"let NERDTreeQuitOnOpen=1
+""NERDTree will auto quit after open file 开启文件后NERDTree自动关闭
+"let NERDTreeShowLineNumbers=1
+"let NERDTreeAutoCenter=1
+""显示行号
+"let NERDTreeWinSize=25
+""设置宽度
+""let g:nerdtree_tabs_open_on_console_startup=1
+""启动vim及切换标签页时自动启动NERDTree
+"let NERDTreeIgnore=['\.pyc','\~$','\.swp']
+""忽略一下文件的显示
+"let NERDTreeShowBookmarks=1
+""显示书签列表
+
+""NERDTree-git-plugin
+"let g:NERDTreeGitStatusIndicatorMapCustom = {
+				"\ 'Modified'  :'✹ ',
+				"\ 'Staged'    :'✚ ',
+				"\ 'Untracked' :'✭ ',
+				"\ 'Renamed'   :'➜ ',
+				"\ 'Unmerged'  :'═ ',
+				"\ 'Deleted'   :'✖ ',
+				"\ 'Dirty'     :'✗ ',
+				"\ 'Ignored'   :'☒ ',
+				"\ 'Clean'     :'✔︎ ',
+				"\ 'Unknown'   :'? ',
+				"\ }
+"let g:NERDTreeGitStatusUseNerdFonts = 1 
+"let g:NERDTreeGitStatusConcealBrackets = 0 " default: 0
+""Hide the boring brackets([ ])
+
+""markdown-preview
+"map <F3> <Plug>MarkdownPreview  
+"" set to 1, preview server available to others in your network
+"" by default, the server listens on localhost (127.0.0.1)
+"" default: 0
+"let g:mkdp_open_to_the_world = 0
+
+"" use custom IP to open preview page
+"" useful when you work in remote vim and preview on local browser
+"" more detail see: https://github.com/iamcco/markdown-preview.nvim/pull/9
+"" default empty
+"let g:mkdp_open_ip = ''
+
+"" specify browser to open preview page
+"" default: ''
+"let g:mkdp_browser = ''
+
+"" use a custom port to start server or random for empty
+"let g:mkdp_port = ''
+
+"" preview page title
+"" ${name} will be replace with the file name
+"let g:mkdp_page_title = '「${name}」'
+
+""vim-rainbow
+"let g:rainbow_active = 1
+
+""ale
+""参考: https://juejin.im/entry/6844903713421656071
+""始终开启标志列
+"let g:ale_sign_column_always = 1
+"let g:ale_set_highlights = 0
+""自定义error和warning图标
+"let g:ale_sign_error = '✗'
+"let g:ale_sign_warning = '⚡'
+""在vim自带的状态栏中整合ale
+"let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+""显示Linter名称,出错或警告等相关信息
+"let g:ale_echo_msg_error_str = 'E'
+"let g:ale_echo_msg_warning_str = 'W'
+"let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+""普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+"nmap sp <Plug>(ale_previous_wrap)
+"nmap sn <Plug>(ale_next_wrap)
+""<Leader>s触发/关闭语法检查
+"nmap <Leader>s :ALEToggle<CR>
+""<Leader>d查看错误或警告的详细信息
+"nmap <Leader>d :ALEDetail<CR>
+
