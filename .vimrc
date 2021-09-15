@@ -199,25 +199,21 @@ tnoremap <Esc><Esc> <C-\><C-n>
 "quit exit terminal mode 快速退出终端模式
 
 "Keymap-Insert mode 插入模式下的快速操作  
-inoremap \h1 # 
-inoremap \h2 ## 
-inoremap \h3 ### 
-inoremap \h4 #### 
-inoremap \h5 ##### 
-inoremap \h6 ###### 
-inoremap \v ``<Left>
-inoremap \b ``````<Left><Left><Left><CR><CR><Up>
-inoremap \l <CR>----------------------<CR>
-inoremap \q - [<++>](#<++>)
+
+inoremap \f \frac{<++>}{<++>}<C-o>2F{
+inoremap \lim \displaystyle \lim_{x\to 0}
+inoremap \u \overline{<++>}<C-o>F{
+inoremap \q [<++>](<++>)<C-o>F[
+inoremap \case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>F=<C-o>2F$
 "markdown  
 
-imap \i if (<++>)<CR>{}<Left><CR><++><Down>
-imap \s switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \w while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \f for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \c class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
-imap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
+inoremap \ci if (<++>)<CR>{}<Left><CR><++><Down>
+inoremap \cs switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \cw while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
+inoremap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
 "c, c++
 
 inoremap <C-z> <C-o>u
