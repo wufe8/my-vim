@@ -204,7 +204,7 @@ inoremap \f \frac{<++>}{<++>}<C-o>2F{
 inoremap \lim \displaystyle \lim_{x\to 0}
 inoremap \u \overline{<++>}<C-o>F{
 inoremap \q [<++>](<++>)<C-o>F[
-inoremap \case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>F=<C-o>2F$
+inoremap \case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>3k<C-o>2F$
 "markdown  
 
 inoremap \ci if (<++>)<CR>{}<Left><CR><++><Down>
