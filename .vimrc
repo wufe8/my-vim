@@ -84,7 +84,9 @@ set ignorecase
 set smartcase
 "searching will ignore case when every letter is lower case  
 set clipboard+=unnamed
+set clipboard+=unnamedplus
 "if \"+=unnamed" vim clipboard will share with system clipboard  
+"if \"+=unnamedplus" neovim clipboard will share with system clipboard  
  
 "----------------------
 "Move 移动  
