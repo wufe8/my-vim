@@ -380,7 +380,7 @@ imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 "rular栏美化
-Plug 'ycm-core/YouCompleteMe'
+"Plug 'ycm-core/YouCompleteMe'
 "代码补全 需要python 在终端中进入插件目录输入 `python install.py --all` 即可编译所有可用语言的代码补全
 Plug 'preservim/nerdtree'
 "可视化文件管理菜单 支持书签
@@ -402,7 +402,7 @@ Plug 'preservim/nerdcommenter'
 "快速注释代码
 Plug 'airblade/vim-gitgutter'
 "在行数左边显示git仓库的变动
-Plug 'dense-analysis/ale'
+"Plug 'dense-analysis/ale'
 "代码错误检查
 Plug 'jiangmiao/auto-pairs'
 "自动括号补全 相较自行编写效率更高
@@ -410,6 +410,8 @@ Plug 'mbbill/undotree'
 "编辑历史记录
 Plug 'tpope/vim-surround'
 "快速更改包裹符号
+Plug 'Yggdroot/indentLine'
+"可视化缩进
 
 "主题 亮暗模式可通过 `set background=[light/dart]` 实现
 Plug 'connorholyday/vim-snazzy'
@@ -583,3 +585,6 @@ nmap <Leader>s :ALEToggle<CR>
 "<Leader>d查看错误或警告的详细信息
 nmap <Leader>d :ALEDetail<CR>
 
+"indentLine
+let g:indent_guides_guide_size = 1
+let g:indent_guides_start_level = 2
