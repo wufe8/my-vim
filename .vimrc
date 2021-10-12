@@ -200,29 +200,6 @@ tnoremap <Esc><Esc> <C-\><C-n>
 "quit exit terminal mode 快速退出终端模式
 
 "Keymap-Insert mode 插入模式下的快速操作  
-<<<<<<< HEAD
-inoremap \h1 # 
-inoremap \h2 ## 
-inoremap \h3 ### 
-inoremap \h4 #### 
-inoremap \h5 ##### 
-inoremap \h6 ###### 
-inoremap \v ``<Left>
-inoremap \b ``````<Left><Left><Left><CR><CR><Up>
-inoremap \l <CR>----------------------<CR>
-inoremap \q - [<++>](#<++>)
-inoremap \f \frac{<++>}{<++>}<C-o>10h
-inoremap \o \overline{<++>}<C-o>4h
-"markdown  
-
-imap \ci if (<++>)<CR>{}<Left><CR><++><Down>
-imap \cs switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cw while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
-imap \ch #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
-=======
 
 inoremap \f \frac{<++>}{<++>}<C-o>2F{
 inoremap \lim \displaystyle \lim_{x\to 0}
@@ -238,7 +215,6 @@ inoremap \cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/
 inoremap \cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
 inoremap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
 inoremap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
->>>>>>> 8fd62eb8d71e969fbf61b1f687466b8722628922
 "c, c++
 
 inoremap <C-z> <C-o>u
@@ -435,13 +411,10 @@ Plug 'mbbill/undotree'
 "编辑历史记录
 Plug 'tpope/vim-surround'
 "快速更改包裹符号
-<<<<<<< HEAD
 Plug 'gcmt/wildfire.vim'
 "回车键快速选取括号包裹内容
-=======
 Plug 'Yggdroot/indentLine'
 "可视化缩进
->>>>>>> 8fd62eb8d71e969fbf61b1f687466b8722628922
 
 "主题 亮暗模式可通过 `set background=[light/dart]` 实现
 Plug 'connorholyday/vim-snazzy'
