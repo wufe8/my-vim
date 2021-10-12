@@ -44,6 +44,7 @@
     - [个性化](#个性化)
 	- [YouCompleteMe-代码补全](#YouCompleteMe)
 	- [ale-代码检查](#ale)
+	- [coc.nvim-vsc同款代码补全](#coc.nvim)
     - [NERDTree-文件管理](#NERDTree)
     - [tagbar-代码结构管理](#Tagbar)
     - [tabular-快速对齐](#Tabular)
@@ -954,6 +955,80 @@ nmap <Leader>s :ALEToggle<CR>
 "<Leader>d查看错误或警告的详细信息
 nmap <Leader>d :ALEDetail<CR>
 ```
+
+### coc.nvim
+
+neovim限定
+类似vs code 支持使用json编写插件 通过LSP做到vsc同级别的代码补全能力
+需要nodejs并安装nodejs的neovim插件
+命令行输入:
+```
+npm install -g neovim
+```
+
+安装:
+```
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+```
+
+具体配置:
+https://github.com/neoclide/coc.nvim
+
+参考配置:
+```
+"------------
+" coc.nvim
+"------------
+
+let g:coc_global_extensions = [
+ \ 'coc-json',
+ \ 'coc-vimlsp',
+ \ 'coc-marketplace',
+ \ 'coc-ccls'
+ \ ]
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+"autocmd CursorHold * silent call CocActionAsync('highlight')
+```
+
 
 ### NERDTree
 
