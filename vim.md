@@ -608,7 +608,7 @@ h<--+-->l
 > <key> 和 <originKey> 一样 映射目标都可为任意长度 类似密码和宏了  
 
 例: 插入模式下一键输入for(c/c++)  
-```
+```vim
 imap /f <CR>for (int i = 0; ;i++){}<Left><Left><CR><Right><CR><CR><Up><Tab><Up><Up><esc>0f;a<Right>
 ```
 
@@ -733,7 +733,7 @@ set splitright
 - 终端模式会沿用终端自身的编码 背景 字体 如果vim主题没有生效 同样先检查终端  
 
 解决乱码问题:  
-```
+```vim
 set fileencodings=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set encoding=utf-8
 "set termencoding=utf-8
@@ -743,7 +743,7 @@ set encoding=utf-8
 ```
 
 解决中文符号以及unicode emoji显示不全的问题 可能在终端模式下有bug:  
-```
+```vim
 set ambiwidth=double
 "fix some word only graph half
 ```
@@ -812,7 +812,7 @@ set ambiwidth=double
 > `-fLo`参数后指定下载路径 只要将其放入vim路径即可 一般为上例路径  
 > 3. 在.vimrc中添加如下:  
 >
-> ```
+> ```vim
 > call plug#begin(<pluginInstallDirection>)
 > 
 > Plug '<githubLink>'call
@@ -836,14 +836,19 @@ set ambiwidth=double
 [推荐链接](https://www.jiqizhixin.com/articles/2020-06-05-4)  
 
 `.vimrc` Plugin部分参考:  
-```  
-"Plugin
+```vim
+"----------------------
+"Plugin 插件
+"----------------------
 call plug#begin('~/.vim/plugged')
-
 Plug 'vim-airline/vim-airline'
 "rular栏美化
-Plug 'ycm-core/YouCompleteMe'
+Plug 'mhinz/vim-startify'
+"美化欢迎界面
+"Plug 'ycm-core/YouCompleteMe'
 "代码补全 需要python 在终端中进入插件目录输入 `python install.py --all` 即可编译所有可用语言的代码补全
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"coc代码补全
 Plug 'preservim/nerdtree'
 "可视化文件管理菜单 支持书签
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -864,8 +869,20 @@ Plug 'preservim/nerdcommenter'
 "快速注释代码
 Plug 'airblade/vim-gitgutter'
 "在行数左边显示git仓库的变动
-Plug 'dense-analysis/ale'
+"Plug 'dense-analysis/ale'
 "代码错误检查
+Plug 'jiangmiao/auto-pairs'
+"自动括号补全 相较自行编写效率更高
+Plug 'mbbill/undotree'
+"编辑历史记录
+Plug 'tpope/vim-surround'
+"快速更改包裹符号
+Plug 'gcmt/wildfire.vim'
+"回车键快速选取括号包裹内容
+Plug 'Yggdroot/indentLine'
+"可视化缩进
+Plug 'RRethy/vim-illuminate'
+"高亮光标上的单词
 
 "主题 亮暗模式可通过 `set background=[light/dart]` 实现
 Plug 'connorholyday/vim-snazzy'
@@ -882,6 +899,8 @@ Plug 'soft-aesthetic/soft-era-vim'
 "低对比 白 紫
 Plug 'rakr/vim-one'
 "亮暗双模式 偏原始风
+Plug 'vim-scripts/github-theme'
+"github风
 
 call plug#end()
 ```
@@ -906,7 +925,7 @@ Snazzy主题独有 透明窗口
 只兼容部分字体 因此找不到字体可能并不是没有成功安装字体  
 例:  
 
-```
+```vim
 set guifont=SimHei:h10
 "22line mode 
 
@@ -934,7 +953,7 @@ YouCompleteME 以下简称YCM
 #### 配置
 - 参考[链接](https://juejin.im/entry/6844903713421656071)  
 
-```
+```vim
 "始终开启标志列
 let g:ale_sign_column_always = 1
 let g:ale_set_highlights = 0
@@ -962,12 +981,12 @@ neovim限定
 类似vs code 支持使用json编写插件 通过LSP做到vsc同级别的代码补全能力
 需要nodejs并安装nodejs的neovim插件
 命令行输入:
-```
+```vim
 npm install -g neovim
 ```
 
 安装:
-```
+```vim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 ```
 
@@ -975,7 +994,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 https://github.com/neoclide/coc.nvim
 
 参考配置:
-```
+```vim
 "------------
 " coc.nvim
 "------------
@@ -1087,7 +1106,7 @@ endfunction
 `let NERDTreeQuitOnOpen=1` 开启文件后自动关闭NERDTree窗口  
 
 推荐配置:  
-```
+```vim
 "NERDTree
 autocmd vimenter * NERDTree
 "open NERDTree split when vim opeded
@@ -1121,7 +1140,7 @@ let NERDTreeShowBookmarks=1
 `:TagbarToggle` 开关Tagbar  
 
 推荐配置:  
-```
+```vim
 map <F8> :TagbarToggle<CR>  
 ```
 
@@ -1267,8 +1286,15 @@ eitherThanOsu = 820
 > 左右不相同的区间符号(如括号) 替换中使用左方会带空格 而使用右方则不带空格
 
 ## 记录 Changelog
+RC1.41 2021/10/15-17/49
+添加vim配置代码块的语法高亮 以及更新推荐插件
+
+RC1.4 2021/10/12-22/45
+添加coc.nvim
+
 RC1.34 2021/04/13-01/51
 更改了vim-surround的描述
+
 RC1.33 2021/01/28-22/09
 修改了模式切换图 更容易阅读了
 因为格式化不方便 添加正则表达式

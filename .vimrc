@@ -384,7 +384,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 "rular栏美化
 Plug 'mhinz/vim-startify'
-"启动界面美化
+"美化欢迎界面
 "Plug 'ycm-core/YouCompleteMe'
 "代码补全 需要python 在终端中进入插件目录输入 `python install.py --all` 即可编译所有可用语言的代码补全
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
