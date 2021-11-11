@@ -1,9 +1,10 @@
-"This .vimrc(or init.vim) is for dairy use by wufe8  
+"This .vimrc(or init.vim) is for dairy use  
+"by wufe8  
 
 "----------------------
 "autocmd 启动执行
 "----------------------
-"if has("nvim");
+"if has("nvim")
 	"autocmd vimenter * set splitbelow
 	"autocmd vimenter * split
 "endif
@@ -74,9 +75,7 @@ set splitbelow
 "`split` will open on the below of origin window(default is `nosplitbelow`) 创建默认垂直分屏窗口将创建在相对原窗口的下方 而非上方  
 set splitright
 "`vsplit` will open in the right of origin window(default is `nosplitright`)) 创建默认垂直分屏窗口将创建在相对原窗口的右方 而非左方  
-set hidden
-"allow user switch file even the file has not saved, may prevent some function jump error 允许用户在文件未保存的情况下切换文件 使函数可以正常跳转
-
+ 
 "----------------------
 "Edit 编辑  
 "----------------------
@@ -203,20 +202,22 @@ tnoremap <Esc><Esc> <C-\><C-n>
 
 "Keymap-Insert mode 插入模式下的快速操作  
 
-inoremap <leader>f \frac{<++>}{<++>}<C-o>2F{
-inoremap <leader>lim \displaystyle \lim_{x\to 0}
-inoremap <leader>u \overline{<++>}<C-o>F{
-inoremap <leader>q [<++>](<++>)<C-o>F[
-inoremap <leader>case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>3k<C-o>2F$
+inoremap \f \frac{<++>}{<++>}<C-o>2F{
+inoremap \lim \displaystyle \lim_{x\to 0}
+inoremap \sum \displaystyle \sum_{i\to 0}^n
+inoremap \int \displaystyle \int_a^b
+inoremap \u \overline{<++>}<C-o>F{
+inoremap \q [<++>](<++>)<C-o>F[
+inoremap \case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>3k<C-o>2F$
 "markdown  
 
-inoremap <leader>ci if (<++>)<CR>{}<Left><CR><++><Down>
-inoremap <leader>cs switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
-inoremap <leader>cw while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
-inoremap <leader>cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
-inoremap <leader>cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
-inoremap <leader>mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
-inoremap <leader>mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
+inoremap \ci if (<++>)<CR>{}<Left><CR><++><Down>
+inoremap \cs switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \cw while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
+inoremap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
 "c, c++
 
 inoremap <C-z> <C-o>u
@@ -362,8 +363,8 @@ noremap ,s :call BoolSwitch()<CR>
 inoremap ,s <ESC>:call BoolSwitch()<CR>a
 "Switch between True and False
 
-"imap <leader>= <CR><ESC>ddkPI
-"imap <leader>- <ESC>ddpXi
+imap \= <CR><ESC>ddkPI
+imap \- <ESC>ddpXi
 "向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
 map ,f /<++><CR>:noh<CR>
 map ,F ?<++><CR>:noh<CR>
@@ -383,12 +384,8 @@ imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 "rular栏美化
-Plug 'mhinz/vim-startify'
-"美化欢迎界面
 "Plug 'ycm-core/YouCompleteMe'
 "代码补全 需要python 在终端中进入插件目录输入 `python install.py --all` 即可编译所有可用语言的代码补全
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"coc代码补全
 Plug 'preservim/nerdtree'
 "可视化文件管理菜单 支持书签
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -417,12 +414,8 @@ Plug 'mbbill/undotree'
 "编辑历史记录
 Plug 'tpope/vim-surround'
 "快速更改包裹符号
-Plug 'gcmt/wildfire.vim'
-"回车键快速选取括号包裹内容
 Plug 'Yggdroot/indentLine'
 "可视化缩进
-Plug 'RRethy/vim-illuminate'
-"高亮光标上的单词
 
 "主题 亮暗模式可通过 `set background=[light/dart]` 实现
 Plug 'connorholyday/vim-snazzy'
@@ -574,80 +567,28 @@ let g:mkdp_page_title = '「${name}」'
 "vim-rainbow
 let g:rainbow_active = 1
 
-""ale
-""参考: https://juejin.im/entry/6844903713421656071
-""始终开启标志列
-"let g:ale_sign_column_always = 1
-"let g:ale_set_highlights = 0
-""自定义error和warning图标
-"let g:ale_sign_error = '✗'
-"let g:ale_sign_warning = '⚡'
-""在vim自带的状态栏中整合ale
-"let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
-""显示Linter名称,出错或警告等相关信息
-"let g:ale_echo_msg_error_str = 'E'
-"let g:ale_echo_msg_warning_str = 'W'
-"let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-""普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
-"nmap sp <Plug>(ale_previous_wrap)
-"nmap sn <Plug>(ale_next_wrap)
-""<Leader>s触发/关闭语法检查
-"nmap <Leader>s :ALEToggle<CR>
-""<Leader>d查看错误或警告的详细信息
-"nmap <Leader>d :ALEDetail<CR>
+"ale
+"参考: https://juejin.im/entry/6844903713421656071
+"始终开启标志列
+let g:ale_sign_column_always = 1
+let g:ale_set_highlights = 0
+"自定义error和warning图标
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡'
+"在vim自带的状态栏中整合ale
+let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+"显示Linter名称,出错或警告等相关信息
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+nmap sp <Plug>(ale_previous_wrap)
+nmap sn <Plug>(ale_next_wrap)
+"<Leader>s触发/关闭语法检查
+nmap <Leader>s :ALEToggle<CR>
+"<Leader>d查看错误或警告的详细信息
+nmap <Leader>d :ALEDetail<CR>
 
 "indentLine
 let g:indent_guides_guide_size = 1
 let g:indent_guides_start_level = 2
-
-"------------
-" coc.nvim
-"------------
-
-let g:coc_global_extensions = [
- \ 'coc-json',
- \ 'coc-vimlsp',
- \ 'coc-marketplace',
- \ 'coc-ccls'
- \ ]
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-" Highlight the symbol and its references when holding the cursor.
-"autocmd CursorHold * silent call CocActionAsync('highlight')

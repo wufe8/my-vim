@@ -1,9 +1,10 @@
-"This .vimrc(or init.vim) is for dairy use by wufe8  
+"This .vimrc(or init.vim) is for dairy use  
+"by wufe8  
 
 "----------------------
 "autocmd 启动执行
 "----------------------
-"if has("nvim");
+"if has("nvim")
 	"autocmd vimenter * set splitbelow
 	"autocmd vimenter * split
 "endif
@@ -83,7 +84,9 @@ set ignorecase
 set smartcase
 "searching will ignore case when every letter is lower case  
 set clipboard+=unnamed
+set clipboard+=unnamedplus
 "if \"+=unnamed" vim clipboard will share with system clipboard  
+"if \"+=unnamedplus" neovim clipboard will share with system clipboard  
  
 "----------------------
 "Move 移动  
@@ -198,27 +201,23 @@ tnoremap <Esc><Esc> <C-\><C-n>
 "quit exit terminal mode 快速退出终端模式
 
 "Keymap-Insert mode 插入模式下的快速操作  
-inoremap \h1 # 
-inoremap \h2 ## 
-inoremap \h3 ### 
-inoremap \h4 #### 
-inoremap \h5 ##### 
-inoremap \h6 ###### 
-inoremap \v ``<Left>
-inoremap \b ``````<Left><Left><Left><CR><CR><Up>
-inoremap \l <CR>----------------------<CR>
-inoremap \q - [<++>](#<++>)
-inoremap \f \frac{<++>}{<++>}<C-o>10h
-inoremap \o \overline{<++>}<C-o>4h
+
+inoremap \f \frac{<++>}{<++>}<C-o>2F{
+inoremap \lim \displaystyle \lim_{x\to 0}
+inoremap \sum \displaystyle \sum_{i\to 0}^n
+inoremap \int \displaystyle \int_a^b
+inoremap \u \overline{<++>}<C-o>F{
+inoremap \q [<++>](<++>)<C-o>F[
+inoremap \case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>3k<C-o>2F$
 "markdown  
 
-imap \ci if (<++>)<CR>{}<Left><CR><++><Down>
-imap \cs switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cw while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
-imap \ch #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
+inoremap \ci if (<++>)<CR>{}<Left><CR><++><Down>
+inoremap \cs switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \cw while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap \mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
+inoremap \mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
 "c, c++
 
 inoremap <C-z> <C-o>u
@@ -379,13 +378,13 @@ imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 "打锚点<++>; `,a`添加; `,n`向下搜索; `,N`向上搜索;
 "`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
 
-"----------------------
-"Plugin 插件
-"----------------------
+""----------------------
+""Plugin 插件
+""----------------------
 "call plug#begin('~/.vim/plugged')
 "Plug 'vim-airline/vim-airline'
 ""rular栏美化
-"Plug 'ycm-core/YouCompleteMe'
+""Plug 'ycm-core/YouCompleteMe'
 ""代码补全 需要python 在终端中进入插件目录输入 `python install.py --all` 即可编译所有可用语言的代码补全
 "Plug 'preservim/nerdtree'
 ""可视化文件管理菜单 支持书签
@@ -407,7 +406,7 @@ imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 ""快速注释代码
 "Plug 'airblade/vim-gitgutter'
 ""在行数左边显示git仓库的变动
-"Plug 'dense-analysis/ale'
+""Plug 'dense-analysis/ale'
 ""代码错误检查
 "Plug 'jiangmiao/auto-pairs'
 ""自动括号补全 相较自行编写效率更高
@@ -415,8 +414,8 @@ imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 ""编辑历史记录
 "Plug 'tpope/vim-surround'
 ""快速更改包裹符号
-"Plug 'gcmt/wildfire.vim'
-""回车键快速选取括号包裹内容
+"Plug 'Yggdroot/indentLine'
+""可视化缩进
 
 ""主题 亮暗模式可通过 `set background=[light/dart]` 实现
 "Plug 'connorholyday/vim-snazzy'
@@ -495,10 +494,10 @@ elseif(has('nvim'))
 	"some language in windows need 黑体 instand of SimHei
 endif
 
-"----------------------
-"Plugin-setting 插件配置
-"----------------------
-"Tagbar
+""----------------------
+""Plugin-setting 插件配置
+""----------------------
+""Tagbar
 "nmap <F7> :TagbarToggle<CR>
 
 ""undotree
@@ -590,3 +589,6 @@ endif
 ""<Leader>d查看错误或警告的详细信息
 "nmap <Leader>d :ALEDetail<CR>
 
+""indentLine
+"let g:indent_guides_guide_size = 1
+"let g:indent_guides_start_level = 2
