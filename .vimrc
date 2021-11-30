@@ -3,7 +3,7 @@
 "----------------------
 "autocmd 启动执行
 "----------------------
-"if has("nvim");
+"if has("nvim")
 	"autocmd vimenter * set splitbelow
 	"autocmd vimenter * split
 "endif
@@ -205,6 +205,8 @@ tnoremap <Esc><Esc> <C-\><C-n>
 
 inoremap <leader>f \frac{<++>}{<++>}<C-o>2F{
 inoremap <leader>lim \displaystyle \lim_{x\to 0}
+inoremap <leader>sum \displaystyle \sum_{i\to 0}^n
+inoremap <leader>int \displaystyle \int_a^b
 inoremap <leader>u \overline{<++>}<C-o>F{
 inoremap <leader>q [<++>](<++>)<C-o>F[
 inoremap <leader>case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>3k<C-o>2F$
