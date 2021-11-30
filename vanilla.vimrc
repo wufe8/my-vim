@@ -3,7 +3,7 @@
 "----------------------
 "autocmd 启动执行
 "----------------------
-"if has("nvim");
+"if has("nvim")
 	"autocmd vimenter * set splitbelow
 	"autocmd vimenter * split
 "endif
@@ -74,7 +74,9 @@ set splitbelow
 "`split` will open on the below of origin window(default is `nosplitbelow`) 创建默认垂直分屏窗口将创建在相对原窗口的下方 而非上方  
 set splitright
 "`vsplit` will open in the right of origin window(default is `nosplitright`)) 创建默认垂直分屏窗口将创建在相对原窗口的右方 而非左方  
- 
+set hidden
+"allow user switch file even the file has not saved, may prevent some function jump error 允许用户在文件未保存的情况下切换文件 使函数可以正常跳转
+
 "----------------------
 "Edit 编辑  
 "----------------------
@@ -83,7 +85,9 @@ set ignorecase
 set smartcase
 "searching will ignore case when every letter is lower case  
 set clipboard+=unnamed
+set clipboard+=unnamedplus
 "if \"+=unnamed" vim clipboard will share with system clipboard  
+"if \"+=unnamedplus" neovim clipboard will share with system clipboard  
  
 "----------------------
 "Move 移动  
@@ -198,27 +202,23 @@ tnoremap <Esc><Esc> <C-\><C-n>
 "quit exit terminal mode 快速退出终端模式
 
 "Keymap-Insert mode 插入模式下的快速操作  
-inoremap \h1 # 
-inoremap \h2 ## 
-inoremap \h3 ### 
-inoremap \h4 #### 
-inoremap \h5 ##### 
-inoremap \h6 ###### 
-inoremap \v ``<Left>
-inoremap \b ``````<Left><Left><Left><CR><CR><Up>
-inoremap \l <CR>----------------------<CR>
-inoremap \q - [<++>](#<++>)
-inoremap \f \frac{<++>}{<++>}<C-o>10h
-inoremap \o \overline{<++>}<C-o>4h
+
+inoremap <leader>f \frac{<++>}{<++>}<C-o>2F{
+inoremap <leader>lim \displaystyle \lim_{x\to 0}
+inoremap <leader>sum \displaystyle \sum_{i\to 0}^n
+inoremap <leader>int \displaystyle \int_a^b
+inoremap <leader>u \overline{<++>}<C-o>F{
+inoremap <leader>q [<++>](<++>)<C-o>F[
+inoremap <leader>case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>3k<C-o>2F$
 "markdown  
 
-imap \ci if (<++>)<CR>{}<Left><CR><++><Down>
-imap \cs switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cw while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
-imap \cp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
-imap \ch #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
+inoremap <leader>ci if (<++>)<CR>{}<Left><CR><++><Down>
+inoremap <leader>cs switch (<++>)<CR>{}<Left><CR><BS>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>case <++>:<CR><++><CR>break;<CR>default:<CR><++><Down><C-o>?switch<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap <leader>cw while (<++>)<CR>{}<Left><CR><++><Down><C-o>?while<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap <leader>cf for (<++>; <++>; <++>)<CR>{}<Left><CR><++><Down><C-o>?for<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap <leader>cc class <++><CR>{}<Left><CR><BS>private:<CR><++>;<CR><BS>public:<CR><++>(<++>);<CR><++>(<++>);<CR>~<++>();<Down>;<C-o>?class<CR><C-o>/<++><CR><C-o>:noh<CR>
+inoremap <leader>mp #include <iostream><CR>#include <vector><CR>#include <string><CR><CR>using namespace std;<CR><CR>int main(int argc, char* argv[])<CR>{}<Left><CR><++><CR>return 0;<Down><C-o>?<++><CR><C-o>:noh<CR><Tab>
+inoremap <leader>mh #ifndef <++><CR>#define <++><CR><CR><++><CR><CR>#endif
 "c, c++
 
 inoremap <C-z> <C-o>u
@@ -247,62 +247,62 @@ imap <M-Up> <C-o><C-w>p<C-o>5k<C-o><C-w>p
 "----------------------
 "括号的自动补全 效率与智能较低
 "----------------------
-"function! InsertPairs(charOpen, charClose)
-    "let l:line = getline(".")
-    "let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
-    "if a:charClose != l:next_char
-        "execute "normal! a" . a:charOpen . a:charClose . ""
-    "end
-"endfunction
-"inoremap ( <ESC>:call InsertPairs('(', ')')<CR>i
-"inoremap [ <ESC>:call InsertPairs('[', ']')<CR>i
-"inoremap { <ESC>:call InsertPairs('{', '}')<CR>i
-"" 括号补全 特别地 如果下一个字符是右括号 不会进行补全 避免出现重复字符
-"function! RemoveNextDoubleChar(char)
-    "let l:line = getline(".")
-    "let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
-    "if a:char == l:next_char
-        "execute "normal! l"
-	"else
-		"execute "normal! a" . a:char . ""
-    "end
-"endfunction
-"inoremap ) <ESC>:call RemoveNextDoubleChar(')')<CR>a
-"inoremap ] <ESC>:call RemoveNextDoubleChar(']')<CR>a
-"inoremap } <ESC>:call RemoveNextDoubleChar('}')<CR>a
-"" 输入一个字符时，如果下一个字符也是括号，则删除它，避免出现重复字符
-"
-""括号补全
-"function! RemoveEmptyPairs()
-    "let l:line = getline(".")
-    "let l:previous_char = l:line[col(".")-1] " 取得当前光标前一个字符
-    "let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
-	""前后三种括号头尾时 删除整对
-    "if previous_char == '(' && next_char == ')'
-		"execute "normal! xxa"
-	"elseif previous_char == '[' && next_char == ']'
-		"execute "normal! xxa"
-	"elseif previous_char == '{' && next_char == '}'
-		"execute "normal! xxa"
-	""普通退格
-	""在开头时
-	"elseif col(".") == 1
-		"if len(l:line) == 0 
-		""开头且为空行
-		""TODO 解决删除行首字符时退行的问题
-			"execute "normal! Xa"
-		"end
-	"else
-		""在行尾时
-		"if len(l:line) == col(".")
-			"execute "normal! xa"
-		"else
-		""正常情况
-			"execute "normal! xi"
-		"end
-    "end
-"endfunction
-" 按退格键时判断当前光标前一个字符，如果是左括号，则删除对应的右括号以及括号中间的内容
+function! InsertPairs(charOpen, charClose)
+	let l:line = getline(".")
+	let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
+	if a:charClose != l:next_char
+		execute "normal! a" . a:charOpen . a:charClose . ""
+	end
+endfunction
+inoremap ( <ESC>:call InsertPairs('(', ')')<CR>i
+inoremap [ <ESC>:call InsertPairs('[', ']')<CR>i
+inoremap { <ESC>:call InsertPairs('{', '}')<CR>i
+" 括号补全 特别地 如果下一个字符是右括号 不会进行补全 避免出现重复字符
+function! RemoveNextDoubleChar(char)
+	let l:line = getline(".")
+	let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
+	if a:char == l:next_char
+		execute "normal! l"
+	else
+		execute "normal! a" . a:char . ""
+	end
+endfunction
+inoremap ) <ESC>:call RemoveNextDoubleChar(')')<CR>a
+inoremap ] <ESC>:call RemoveNextDoubleChar(']')<CR>a
+inoremap } <ESC>:call RemoveNextDoubleChar('}')<CR>a
+" 输入一个字符时，如果下一个字符也是括号，则删除它，避免出现重复字符
+
+"括号补全
+function! RemoveEmptyPairs()
+	let l:line = getline(".")
+	let l:previous_char = l:line[col(".")-1] " 取得当前光标前一个字符
+	let l:next_char = l:line[col(".")] " 取得当前光标后一个字符
+	"前后三种括号头尾时 删除整对
+	if previous_char == '(' && next_char == ')'
+		execute "normal! xxa"
+	elseif previous_char == '[' && next_char == ']'
+		execute "normal! xxa"
+	elseif previous_char == '{' && next_char == '}'
+		execute "normal! xxa"
+	"普通退格
+	"在开头时
+	elseif col(".") == 1
+		if len(l:line) == 0 
+		"开头且为空行
+		"TODO 解决删除行首字符时退行的问题
+			execute "normal! Xa"
+		end
+	else
+		"在行尾时
+		if len(l:line) == col(".")
+			execute "normal! xa"
+		else
+		"正常情况
+			execute "normal! xi"
+		end
+	end
+endfunction
+ "按退格键时判断当前光标前一个字符，如果是左括号，则删除对应的右括号以及括号中间的内容
 
 function! RemovePairs()
 	let l:line = getline(".")
@@ -364,8 +364,8 @@ noremap ,s :call BoolSwitch()<CR>
 inoremap ,s <ESC>:call BoolSwitch()<CR>a
 "Switch between True and False
 
-imap \= <CR><ESC>ddkPI
-imap \- <ESC>ddpXi
+"imap <leader>= <CR><ESC>ddkPI
+"imap <leader>- <ESC>ddpXi
 "向上回车(<S-BS><S-CR> can run correctly in non-gui vim)
 map ,f /<++><CR>:noh<CR>
 map ,F ?<++><CR>:noh<CR>
@@ -379,14 +379,18 @@ imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 "打锚点<++>; `,a`添加; `,n`向下搜索; `,N`向上搜索;
 "`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
 
-"----------------------
-"Plugin 插件
-"----------------------
+""----------------------
+""Plugin 插件
+""----------------------
 "call plug#begin('~/.vim/plugged')
 "Plug 'vim-airline/vim-airline'
 ""rular栏美化
-"Plug 'ycm-core/YouCompleteMe'
+"Plug 'mhinz/vim-startify'
+""美化欢迎界面
+""Plug 'ycm-core/YouCompleteMe'
 ""代码补全 需要python 在终端中进入插件目录输入 `python install.py --all` 即可编译所有可用语言的代码补全
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+""coc代码补全
 "Plug 'preservim/nerdtree'
 ""可视化文件管理菜单 支持书签
 "Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -407,7 +411,7 @@ imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 ""快速注释代码
 "Plug 'airblade/vim-gitgutter'
 ""在行数左边显示git仓库的变动
-"Plug 'dense-analysis/ale'
+""Plug 'dense-analysis/ale'
 ""代码错误检查
 "Plug 'jiangmiao/auto-pairs'
 ""自动括号补全 相较自行编写效率更高
@@ -417,6 +421,10 @@ imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 ""快速更改包裹符号
 "Plug 'gcmt/wildfire.vim'
 ""回车键快速选取括号包裹内容
+"Plug 'Yggdroot/indentLine'
+""可视化缩进
+"Plug 'RRethy/vim-illuminate'
+""高亮光标上的单词
 
 ""主题 亮暗模式可通过 `set background=[light/dart]` 实现
 "Plug 'connorholyday/vim-snazzy'
@@ -495,10 +503,10 @@ elseif(has('nvim'))
 	"some language in windows need 黑体 instand of SimHei
 endif
 
-"----------------------
-"Plugin-setting 插件配置
-"----------------------
-"Tagbar
+""----------------------
+""Plugin-setting 插件配置
+""----------------------
+""Tagbar
 "nmap <F7> :TagbarToggle<CR>
 
 ""undotree
@@ -568,25 +576,80 @@ endif
 ""vim-rainbow
 "let g:rainbow_active = 1
 
-""ale
-""参考: https://juejin.im/entry/6844903713421656071
-""始终开启标志列
-"let g:ale_sign_column_always = 1
-"let g:ale_set_highlights = 0
-""自定义error和warning图标
-"let g:ale_sign_error = '✗'
-"let g:ale_sign_warning = '⚡'
-""在vim自带的状态栏中整合ale
-"let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
-""显示Linter名称,出错或警告等相关信息
-"let g:ale_echo_msg_error_str = 'E'
-"let g:ale_echo_msg_warning_str = 'W'
-"let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-""普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
-"nmap sp <Plug>(ale_previous_wrap)
-"nmap sn <Plug>(ale_next_wrap)
-""<Leader>s触发/关闭语法检查
-"nmap <Leader>s :ALEToggle<CR>
-""<Leader>d查看错误或警告的详细信息
-"nmap <Leader>d :ALEDetail<CR>
+"""ale
+"""参考: https://juejin.im/entry/6844903713421656071
+"""始终开启标志列
+""let g:ale_sign_column_always = 1
+""let g:ale_set_highlights = 0
+"""自定义error和warning图标
+""let g:ale_sign_error = '✗'
+""let g:ale_sign_warning = '⚡'
+"""在vim自带的状态栏中整合ale
+""let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+"""显示Linter名称,出错或警告等相关信息
+""let g:ale_echo_msg_error_str = 'E'
+""let g:ale_echo_msg_warning_str = 'W'
+""let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+"""普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+""nmap sp <Plug>(ale_previous_wrap)
+""nmap sn <Plug>(ale_next_wrap)
+"""<Leader>s触发/关闭语法检查
+""nmap <Leader>s :ALEToggle<CR>
+"""<Leader>d查看错误或警告的详细信息
+""nmap <Leader>d :ALEDetail<CR>
 
+""indentLine
+"let g:indent_guides_guide_size = 1
+"let g:indent_guides_start_level = 2
+
+""------------
+"" coc.nvim
+""------------
+
+"let g:coc_global_extensions = [
+ "\ 'coc-json',
+ "\ 'coc-vimlsp',
+ "\ 'coc-marketplace',
+ "\ 'coc-ccls'
+ "\ ]
+
+"" Use tab for trigger completion with characters ahead and navigate.
+"" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+"" other plugin before putting this into your config.
+"inoremap <silent><expr> <TAB>
+      "\ pumvisible() ? "\<C-n>" :
+      "\ <SID>check_back_space() ? "\<TAB>" :
+      "\ coc#refresh()
+"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+"function! s:check_back_space() abort
+  "let col = col('.') - 1
+  "return !col || getline('.')[col - 1]  =~# '\s'
+"endfunction
+
+"" Use `[g` and `]g` to navigate diagnostics
+"" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+"nmap <silent> [g <Plug>(coc-diagnostic-prev)
+"nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+"" GoTo code navigation.
+"nmap <silent> gd <Plug>(coc-definition)
+"nmap <silent> gy <Plug>(coc-type-definition)
+"nmap <silent> gi <Plug>(coc-implementation)
+"nmap <silent> gr <Plug>(coc-references)
+
+"" Use K to show documentation in preview window.
+"nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+"function! s:show_documentation()
+  "if (index(['vim','help'], &filetype) >= 0)
+    "execute 'h '.expand('<cword>')
+  "elseif (coc#rpc#ready())
+    "call CocActionAsync('doHover')
+  "else
+    "execute '!' . &keywordprg . " " . expand('<cword>')
+  "endif
+"endfunction
+
+"" Highlight the symbol and its references when holding the cursor.
+""autocmd CursorHold * silent call CocActionAsync('highlight')
