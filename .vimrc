@@ -137,8 +137,8 @@ map R <nop>
 map RH <C-w>v:e $VIMDOC<CR><C-w>15+
 "[RH] open help file need to define $VIMDOC 开启自定义说明文档 需要定义变量  
 if(has('nvim') && has('win32'))
-	map RC :source $MYNEOVIMRC<CR>
-	map RE :tabedit $MYNEOVIMRC<CR>
+	map RC :source $MYVIMRC<CR>
+	map RE :tabedit $MYVIMRC<CR>
 else
 	map RC :source $MYVIMRC<CR>
 	map RE :tabedit $MYVIMRC<CR>
@@ -158,8 +158,10 @@ noremap <C-l> 5l
 map <M-Down> <C-w>p5j<C-w>p
 map <M-Up> <C-w>p5k<C-w>p
 "[alt][Up/Down] 将进行另一分屏的移动 更适用快速浏览说明文档
-map <M-j> gj
-map <M-k> gk
+noremap <M-h> 5h
+noremap <M-j> 5j
+noremap <M-k> 5k
+noremap <M-l> 5l
 "[alt][j/k] 将进行屏幕渲染行移动 更适用与实际编辑时的自动换行  
 "同时上项的noremap <C->将不受影响 仍然为实际行跳转  
 map S <nop>
@@ -180,11 +182,12 @@ map ST :tabedit
 map SC :set splitbelow<CR>:split<CR>:terminal<CR>
 "[ST] to new tab 新建标签页  
 "[SC] create terminal split at the bottom 在底部创建内置终端  
-if(has('nvim') && has('win32'))
-	noremap <C--> :noh<CR>
-else
-	noremap <C-_> :noh<CR>
-endif
+"if(has('nvim') && has('win32'))
+	"noremap <C-_> :noh<CR>
+"else
+	"noremap <C-_> :noh<CR>
+"endif
+noremap <C--> :noh<CR>
 "[ctrl+'-'(minus)] to hidden search result highlight 关闭搜索高亮显示  
 "[ctrl+'/'] in linux
 "noremap <F5> :call CompileRunProg()<CR>  
@@ -210,6 +213,8 @@ inoremap <leader>int \displaystyle \int_a^b
 inoremap <leader>u \overline{<++>}<C-o>F{
 inoremap <leader>q [<++>](<++>)<C-o>F[
 inoremap <leader>case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>3k<C-o>2F$
+inoremap <leader>app approx
+inoremap <leader>inf infty
 "markdown  
 
 inoremap <leader>ci if (<++>)<CR>{}<Left><CR><++><Down>
@@ -379,6 +384,16 @@ imap ,C <C-o>?<++><CR><C-o>:noh<CR><C-o><Del><Del><Del><Del>
 "打锚点<++>; `,a`添加; `,n`向下搜索; `,N`向上搜索;
 "`,c`向下搜索并删除锚点; `,C`向上搜索并删除锚点;
 
+"tab自动补全
+function! CleverTab()
+        if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+                return "\<Tab>"
+        else
+                return "\<C-N>"
+        endif
+endfunction
+inoremap <Tab> <C-R>=CleverTab()<CR>
+
 "----------------------
 "Plugin 插件
 "----------------------
@@ -401,7 +416,7 @@ Plug 'majutsushi/tagbar'
 "可视化文件代码结构 支持快速跳转 需要python
 Plug 'godlygeek/tabular'
 "提供快速对齐代码块的方法
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 "提供开启浏览器实时预览markdown的方法
 "Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "go语言支持
@@ -616,10 +631,10 @@ let g:coc_global_extensions = [
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+"inoremap <silent><expr> <TAB>
+      "\ pumvisible() ? "\<C-n>" :
+      "\ <SID>check_back_space() ? "\<TAB>" :
+      "\ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
