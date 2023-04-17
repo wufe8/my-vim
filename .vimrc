@@ -213,8 +213,8 @@ inoremap <leader>int \displaystyle \int_a^b
 inoremap <leader>u \overline{<++>}<C-o>F{
 inoremap <leader>q [<++>](<++>)<C-o>F[
 inoremap <leader>case $$<++>=\begin{cases}<CR><++>&\text{,if$<++>$}\\<CR><++>&\text{,if$<++>$}<CR>\end{cases}$$<C-o>3k<C-o>2F$
-inoremap <leader>app approx
-inoremap <leader>inf infty
+inoremap <leader>app \approx
+inoremap <leader>inf \infty
 "markdown  
 
 inoremap <leader>ci if (<++>)<CR>{}<Left><CR><++><Down>
